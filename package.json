@@ -8,13 +8,16 @@
     "compile": "electron-webpack",
     "dist": "npm run compile && electron-builder",
     "dist:dir": "npm run dist --dir -c.compression=store -c.mac.identity=null",
-    "pretty": "prettier --write \"./**/*.{ts,tsx,yaml}\""
+    "pretty": "prettier --write \"./**/*.{ts,tsx,yaml}\"",
+    "test": "jest"
   },
   "author": "Alic Szecsei <aszecsei@gmail.com>",
   "license": "ISC",
   "repository": "github:aszecsei/atomize",
   "devDependencies": {
     "@types/electron-devtools-installer": "^2.2.0",
+    "@types/enzyme": "^3.10.4",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
     "@types/irc": "^0.3.33",
     "@types/jest": "^24.0.24",
     "@types/react": "^16.9.17",
@@ -26,9 +29,12 @@
     "electron-devtools-installer": "^2.2.4",
     "electron-webpack": "^2.7.4",
     "electron-webpack-ts": "^3.2.0",
+    "enzyme": "^3.11.0",
+    "enzyme-to-json": "^3.4.3",
     "jest": "^24.9.0",
     "jest-emotion": "^10.0.27",
     "prettier": "^1.19.1",
+    "ts-jest": "^24.2.0",
     "typescript": "^3.7.4",
     "webpack": "4.40.0"
   },
@@ -39,6 +45,7 @@
     "electron-log": "^4.0.0",
     "electron-updater": "^4.2.0",
     "emotion-theming": "^10.0.27",
+    "enzyme-adapter-react-16": "^1.15.2",
     "immer": "^5.1.0",
     "irc": "^0.5.2",
     "react": "^16.12.0",
