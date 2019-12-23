@@ -1,18 +1,18 @@
 export interface ICounterState {
-  readonly value: number;
+  readonly value: number
 }
 
 // Actions
 
-export const INCREMENT = "INCREMENT";
-export const RESET = "RESET";
+export const INCREMENT = 'INCREMENT'
+export const RESET = 'RESET'
 
 interface IIncrementAction {
-  type: typeof INCREMENT;
+  type: typeof INCREMENT
 }
 
 interface IResetAction {
-  type: typeof RESET;
+  type: typeof RESET
 }
 
-export type ICounterActionTypes = IIncrementAction | IResetAction;
+export type CounterActionTypes = IIncrementAction | IResetAction

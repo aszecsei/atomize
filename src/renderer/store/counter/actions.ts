@@ -1,13 +1,13 @@
-import { INCREMENT, RESET, ICounterActionTypes } from "./types";
+import { INCREMENT, RESET, CounterActionTypes } from './types'
 
-export function increment(): ICounterActionTypes {
+export function increment(): CounterActionTypes {
   return {
-    type: INCREMENT
-  };
+    type: INCREMENT,
+  }
 }
 
-export function reset(): ICounterActionTypes {
+export function reset(): CounterActionTypes {
   return {
-    type: RESET
-  };
+    type: RESET,
+  }
 }
