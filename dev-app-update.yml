@@ -1,13 +1,13 @@
-appId: "com.alic-szecsei.atomize"
-productName: "Atomize"
+appId: 'com.alic-szecsei.atomize'
+productName: 'Atomize'
 
 # Package electron code into a asar archive. Set to false to debug issues.
 asar: true
 
 # Mac OS configuration
 mac:
-  category: "public.app-category.social-networking"
-  icon: "src/renderer/assets/images/icon.icns"
+  category: 'public.app-category.social-networking'
+  icon: 'src/renderer/assets/images/icon.icns'
 
 # Config for OSX dmg
 dmg:
@@ -16,15 +16,15 @@ dmg:
       y: 220
     - x: 410
       y: 220
-      type: "link"
-      path: "/Applications"
+      type: 'link'
+      path: '/Applications'
 
 # Windows configuration
 win:
-  icon: "src/renderer/assets/images/icon.ico"
+  icon: 'src/renderer/assets/images/icon.ico'
   target:
-    - "zip"
-    - "nsis"
+    - 'zip'
+    - 'nsis'
 
 # Config for the windows installer
 nsis:
@@ -33,15 +33,15 @@ nsis:
 
 # Linux configuration
 linux:
-  category: "Social Media"
+  category: 'Network'
   target:
-    - "AppImage"
-    - "deb"
-    - "rpm"
+    - 'AppImage'
+    - 'deb'
+    - 'rpm'
 
 directories:
-  buildResources: "resources"
-  output: "release"
+  buildResources: 'resources'
+  output: 'release'
 
 publish:
-  provider: "github"
+  provider: 'github'

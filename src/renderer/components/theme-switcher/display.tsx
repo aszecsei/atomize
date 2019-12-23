@@ -16,7 +16,9 @@ export const ThemeSwitcher = (props: IThemeSwitcherProps) => (
         props.setMode('dark')
       }
     }}
-  />
+  >
+    Switch!
+  </button>
 )
 
 export default ThemeSwitcher

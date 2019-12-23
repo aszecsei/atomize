@@ -1,7 +1,6 @@
 import { app, BrowserWindow } from 'electron'
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
-  REACT_PERF,
   REDUX_DEVTOOLS,
 } from 'electron-devtools-installer'
 import * as path from 'path'
@@ -60,14 +59,6 @@ export function createMainWindow() {
   })
 
   installExtension(REACT_DEVELOPER_TOOLS)
-    .then(name => {
-      console.log(`Added extension: ${name}`)
-    })
-    .catch(err => {
-      console.error(`An error occurred: ${err}`)
-    })
-
-  installExtension(REACT_PERF)
     .then(name => {
       console.log(`Added extension: ${name}`)
     })

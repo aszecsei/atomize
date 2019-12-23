@@ -1,23 +1,19 @@
 import * as React from 'react'
-import { ThemeProvider } from './theme'
 
 import { Provider } from 'react-redux'
 import store from './store'
 
-import { backgroundColor } from './theme'
-import styled from '@emotion/styled'
+import ThemeProvider from './components/theme-provider'
 
-import ToggleTheme from './components/ThemeSwitcher'
-
-const Header = styled.h1`
-  background-color: ${backgroundColor};
-`
+import Counter from './components/counter'
+import ThemeSwitcher from './components/theme-switcher'
 
 export const App = () => (
   <Provider store={store}>
     <ThemeProvider>
-      <Header>Hello, world!</Header>
+      <h1>Hello, world!</h1>
+      <Counter />
+      <ThemeSwitcher />
     </ThemeProvider>
-    <ToggleTheme />
   </Provider>
 )
