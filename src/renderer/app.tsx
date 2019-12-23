@@ -6,7 +6,7 @@ import store from './store'
 import ThemeProvider from './components/theme-provider'
 import Global from './global-styles'
 
-import { Columns } from './components/base/column'
+import { Content } from './components/layout/content'
 import LeftPanel from './components/left-panel'
 import MainPanel from './components/main'
 import RightPanel from './components/right-panel'
@@ -15,11 +15,11 @@ export const App = () => (
   <Provider store={store}>
     <ThemeProvider>
       <Global />
-      <Columns>
+      <Content>
         <LeftPanel />
         <MainPanel />
         <RightPanel />
-      </Columns>
+      </Content>
     </ThemeProvider>
   </Provider>
 )

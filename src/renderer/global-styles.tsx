@@ -465,6 +465,19 @@ const GlobalStyle = css`
     display: inherit;
     position: absolute;
   }
+  a,
+  button,
+  div,
+  input,
+  select,
+  span,
+  strong,
+  textarea {
+    outline: 0;
+  }
+  button {
+    border: 0;
+  }
   /* ================ FONTS ================ */
   /* raleway-regular - latin */
   @font-face {

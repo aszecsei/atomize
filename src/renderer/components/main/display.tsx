@@ -1,13 +1,13 @@
 import * as React from 'react'
 
-import { Column } from '../base/column'
+import { Chat } from '../layout/chat'
 
 interface IMainProps {}
 
 const Main = (props: IMainProps) => (
-  <Column size={8}>
+  <Chat>
     <h1>Hello, World!</h1>
-  </Column>
+  </Chat>
 )
 
 export default Main
