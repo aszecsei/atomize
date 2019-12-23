@@ -25,7 +25,7 @@ const initialState: ISettingsState = {
   realName: 'atomize IRC client',
 }
 
-export function settingsReducer(
+function settingsReducer(
   state = initialState,
   action: SettingsActionTypes
 ): ISettingsState {
@@ -36,3 +36,4 @@ export function settingsReducer(
       return state
   }
 }
+export default settingsReducer

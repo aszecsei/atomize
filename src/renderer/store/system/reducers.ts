@@ -10,7 +10,7 @@ const initialState: ISystemState = {
   addServerModal: false,
 }
 
-export function systemReducer(
+function systemReducer(
   state = initialState,
   action: SystemActionTypes
 ): ISystemState {
@@ -27,3 +27,8 @@ export function systemReducer(
       return state
   }
 }
+
+export default systemReducer
+
+export const isAddServerModalOpen = (state: ISystemState) =>
+  state.addServerModal

@@ -1,33 +1,71 @@
-import { connectionsReducer } from './connections/reducers'
-import { counterReducer } from './counter/reducers'
-import { guiReducer } from './gui/reducers'
-import { settingsReducer } from './settings/reducers'
+import connections, * as fromConnections from './connections/reducers'
+import gui, * as fromGui from './gui/reducers'
+import settings, * as fromSettings from './settings/reducers'
+import system, * as fromSystem from './system/reducers'
+
 import { combineReducers, createStore, applyMiddleware } from 'redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { connectionsEpic } from './connections/epics'
-import { combineEpics, createEpicMiddleware } from 'redux-observable'
+import { connectionsSaga } from './connections/sagas'
+import createSagaMiddleware from 'redux-saga'
+import { spawn } from 'redux-saga/effects'
 
 export const rootReducer = combineReducers({
-  connections: connectionsReducer,
-  counter: counterReducer,
-  gui: guiReducer,
-  settings: settingsReducer,
+  connections,
+  gui,
+  settings,
+  system,
 })
 
 export type RootState = ReturnType<typeof rootReducer>
 
-export const connectionsSelector = (state: RootState) => state.connections
-export const counterSelector = (state: RootState) => state.counter
-export const guiSelector = (state: RootState) => state.gui
-export const settingsSelector = (state: RootState) => state.settings
-
-const rootEpic = combineEpics(connectionsEpic)
-const epicMiddleware = createEpicMiddleware()
-
+const epicMiddleware = createSagaMiddleware()
 const store = createStore(
   rootReducer,
   composeWithDevTools(applyMiddleware(epicMiddleware))
 )
-epicMiddleware.run(rootEpic)
+
+function* rootSaga() {
+  yield spawn(connectionsSaga)
+}
+epicMiddleware.run(rootSaga)
 
 export default store
+
+// ==================================== SELECTORS ====================================
+
+// SETTINGS
+export const getSettings = (state: RootState) => state.settings
+
+// SYSTEM
+export const isAddServerModalOpen = (state: RootState) =>
+  fromSystem.isAddServerModalOpen(state.system)
+
+// GUI
+export const getThemeMode = (state: RootState) =>
+  fromGui.getThemeMode(state.gui)
+export const getThemeSize = (state: RootState) =>
+  fromGui.getThemeSize(state.gui)
+
+// CONNECTIONS
+export const getSelectedServerId = (state: RootState) =>
+  fromConnections.getSelectedServerId(state.connections)
+export const getSelectedChannelId = (state: RootState) =>
+  fromConnections.getSelectedChannelId(state.connections)
+export const getServers = (state: RootState) =>
+  fromConnections.getServers(state.connections)
+export const getSelectedServer = (state: RootState) =>
+  fromConnections.getSelectedServer(state.connections)
+export const getSelectedChannel = (state: RootState) =>
+  fromConnections.getSelectedChannel(state.connections)
+export const getServer = (state: RootState, serverId: string) =>
+  fromConnections.getServer(state.connections, serverId)
+export const getChannel = (
+  state: RootState,
+  serverId: string,
+  channelId: string
+) => fromConnections.getChannel(state.connections, serverId, channelId)
+export const getChannelByName = (
+  state: RootState,
+  serverId: string,
+  channel: string
+) => fromConnections.getChannelByName(state.connections, serverId, channel)

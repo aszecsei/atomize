@@ -21,7 +21,7 @@ const initialState: IConnectionsState = {
   selectedServerId: undefined,
 }
 
-export function connectionsReducer(
+function connectionsReducer(
   state = initialState,
   action: ConnectionsActionTypes
 ): IConnectionsState {
@@ -35,7 +35,22 @@ export function connectionsReducer(
           url: action.url,
           nickname: action.nickname,
           defaultChannels: action.channels,
-          channels: [],
+          channels: [
+            {
+              id: uuid(),
+              name: '#',
+              log: [],
+              connected: false,
+              isUnread: false,
+            },
+            ...action.channels.map(c => ({
+              id: uuid(),
+              name: c,
+              log: [],
+              connected: false,
+              isUnread: false,
+            })),
+          ],
           log: [],
           connected: false,
         })
@@ -122,27 +137,25 @@ export function connectionsReducer(
       return state
   }
 }
+export default connectionsReducer
 
-export const selectedServerIdSelector = (state: IConnectionsState) =>
+export const getSelectedServerId = (state: IConnectionsState) =>
   state.selectedServerId
-export const selectedChannelIdSelector = (state: IConnectionsState) =>
+export const getSelectedChannelId = (state: IConnectionsState) =>
   state.selectedChannelId
-export const serversSelector = (state: IConnectionsState) => state.servers
+export const getServers = (state: IConnectionsState) => state.servers
 
-export const selectedServerSelector = createSelector(
-  serversSelector,
-  selectedServerIdSelector,
+export const getSelectedServer = createSelector(
+  getServers,
+  getSelectedServerId,
   (servers, selectedServerId) => servers.find(s => s.id === selectedServerId)
 )
 
-export const selectedChannelSelector = createSelector(
-  serversSelector,
-  selectedServerIdSelector,
-  selectedChannelIdSelector,
-  (servers, selectedServerId, selectedChannelId) =>
-    servers
-      .find(s => s.id === selectedServerId)
-      ?.channels.find(c => c.id === selectedChannelId)
+export const getSelectedChannel = createSelector(
+  getSelectedServer,
+  getSelectedChannelId,
+  (server, selectedChannelId) =>
+    server?.channels.find(c => c.id === selectedChannelId)
 )
 
 export const getServer = (state: IConnectionsState, serverId: string) =>
@@ -156,3 +169,12 @@ export const getChannel = (
   state.servers
     .find(s => s.id === serverId)
     ?.channels.find(c => c.id === channelId)
+
+export const getChannelByName = (
+  state: IConnectionsState,
+  serverId: string,
+  channel: string
+) =>
+  state.servers
+    .find(s => s.id === serverId)
+    ?.channels.find(c => c.name === channel)

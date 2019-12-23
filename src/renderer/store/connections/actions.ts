@@ -15,6 +15,7 @@ import {
   RECEIVE_MESSAGE,
   MARK_SERVER_STATUS,
   MARK_CHANNEL_STATUS,
+  FORCED_JOIN_CHANNEL,
 } from './types'
 
 export function addServer(
@@ -136,6 +137,17 @@ export function selectChannel(
     type: SELECT_CHANNEL,
     serverId,
     channelId,
+  }
+}
+
+export function forcedJoinChannel(
+  serverId: string,
+  channel: string
+): ConnectionsActionTypes {
+  return {
+    type: FORCED_JOIN_CHANNEL,
+    serverId,
+    channel,
   }
 }
 

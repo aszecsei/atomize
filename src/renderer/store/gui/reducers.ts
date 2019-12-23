@@ -6,10 +6,7 @@ const initialState: IThemeState = {
   size: 'cozy',
 }
 
-export function guiReducer(
-  state = initialState,
-  action: GuiActionTypes
-): IThemeState {
+function guiReducer(state = initialState, action: GuiActionTypes): IThemeState {
   switch (action.type) {
     case SET_MODE:
       return produce(state, draft => {
@@ -23,6 +20,7 @@ export function guiReducer(
       return state
   }
 }
+export default guiReducer
 
-export const modeSelector = (state: IThemeState) => state.mode
-export const sizeSelector = (state: IThemeState) => state.size
+export const getThemeMode = (state: IThemeState) => state.mode
+export const getThemeSize = (state: IThemeState) => state.size

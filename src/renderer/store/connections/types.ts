@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid'
+
 export enum MessageType {
   MESSAGE,
   NICKCHANGE,
@@ -17,6 +19,157 @@ export interface IMessage {
   readonly sender: string
   readonly sent: Date
   readonly isMe: boolean
+}
+
+function makeMessage(val: Partial<IMessage>): IMessage {
+  const def: IMessage = {
+    id: uuid(),
+    type: MessageType.MESSAGE,
+    text: '',
+    sender: '',
+    sent: new Date(),
+    isMe: false,
+  }
+  return {
+    ...def,
+    ...val,
+  }
+}
+
+export function parseKillMessage(
+  nick: string,
+  reason?: string,
+  sent: Date = new Date(),
+  isMe = false
+): IMessage {
+  const str =
+    reason && reason !== ''
+      ? `${nick} has been killed (${reason})`
+      : `${nick} has been killed`
+  return makeMessage({
+    type: MessageType.KILL,
+    text: str,
+    sent,
+    isMe,
+  })
+}
+
+export function parseKickMessage(
+  nick: string,
+  by: string,
+  channel: string,
+  reason?: string,
+  sent: Date = new Date(),
+  isMe = false
+): IMessage {
+  const str =
+    reason && reason !== ''
+      ? `${by} kicked ${nick} (reason: ${reason})`
+      : `${by} kicked ${nick}`
+  return makeMessage({
+    type: MessageType.KICK,
+    text: str,
+    sent,
+    isMe,
+  })
+}
+
+export function parsePartMessage(
+  nick: string,
+  channel: string,
+  reason?: string,
+  sent: Date = new Date(),
+  isMe = false
+): IMessage {
+  const str =
+    reason && reason !== ''
+      ? `${nick} has left ${channel} (reason: ${reason})`
+      : `${nick} has left ${channel}`
+  return makeMessage({
+    type: MessageType.PART,
+    text: str,
+    sent,
+    isMe,
+  })
+}
+
+export function parseJoinMessage(
+  nick: string,
+  channel: string,
+  sent: Date = new Date(),
+  isMe = false
+): IMessage {
+  const str = `${nick} has joined ${channel}`
+  return makeMessage({
+    type: MessageType.JOIN,
+    text: str,
+    sent,
+    isMe,
+  })
+}
+
+export function parseQuitMessage(
+  nick: string,
+  reason?: string,
+  sent: Date = new Date(),
+  isMe = false
+): IMessage {
+  const str =
+    reason && reason !== ''
+      ? `${nick} has quit (reason: ${reason})`
+      : `${nick} has quit`
+  return makeMessage({
+    type: MessageType.QUIT,
+    text: str,
+    sent,
+    isMe,
+  })
+}
+
+export function parseNoticeMessage(
+  from: string,
+  to: string,
+  message: string,
+  isMe = false
+): IMessage {
+  const sender = `(${from} notice to ${to})`
+  return makeMessage({
+    type: MessageType.NOTICE,
+    text: message,
+    sender,
+    isMe,
+  })
+}
+
+export function parseMessage(
+  nick: string,
+  to: string,
+  text: string,
+  sent: Date = new Date(),
+  isMe = false
+): IMessage {
+  return makeMessage({
+    type: MessageType.MESSAGE,
+    text,
+    sender: nick,
+    sent,
+    isMe,
+  })
+}
+
+export function parseNickChange(
+  oldnick: string,
+  newnick: string,
+  channels: string[],
+  sent: Date = new Date(),
+  isMe = false
+): IMessage {
+  return makeMessage({
+    type: MessageType.NICKCHANGE,
+    text: `${oldnick} is now known as ${newnick}`,
+    sent,
+    isMe,
+  })
 }
 
 export interface IChannel {
@@ -59,11 +212,12 @@ export const JOIN_CHANNEL = 'JOIN_CHANNEL' // Joins a channel.
 export const PART_CHANNEL = 'PART_CHANNEL' // Parts from a channel. Does not remove that channel from the stored channel list!
 export const MARK_CHANNEL_STATUS = 'MARK_CHANNEL_STATUS' // Mark a channel as being joined or not
 export const SELECT_CHANNEL = 'SELECT_CHANNEL' // Selects a channel to view & send messages to that channel
+export const FORCED_JOIN_CHANNEL = 'FORCED_JOIN_CHANNEL' // Occurs when the user is forcibly joined to a channel
 
 export const SEND_MESSAGE = 'SEND_MESSAGE' // Send a message to the active channel or server
 export const RECEIVE_MESSAGE = 'RECEIVE_MESSAGE' // Receives a message from a server or channel
 
-interface IAddServerAction {
+export interface IAddServerAction {
   type: typeof ADD_SERVER
   name: string
   url: string
@@ -71,77 +225,83 @@ interface IAddServerAction {
   channels: string[]
 }
 
-interface IRemoveServerAction {
+export interface IRemoveServerAction {
   type: typeof REMOVE_SERVER
   serverId: string
 }
 
-interface IConnectToServerAction {
+export interface IConnectToServerAction {
   type: typeof CONNECT_TO_SERVER
   serverId: string
 }
 
-interface IDisconnectFromServerAction {
+export interface IDisconnectFromServerAction {
   type: typeof DISCONNECT_FROM_SERVER
   serverId: string
 }
 
-interface IMarkServerStatusAction {
+export interface IMarkServerStatusAction {
   type: typeof MARK_SERVER_STATUS
   serverId: string
   connected: boolean
 }
 
-interface ISelectServerAction {
+export interface ISelectServerAction {
   type: typeof SELECT_SERVER
   serverId: string
 }
 
-interface IAddChannelAction {
+export interface IAddChannelAction {
   type: typeof ADD_CHANNEL
   serverId: string
   channel: string
 }
 
-interface IRemoveChannelAction {
+export interface IRemoveChannelAction {
   type: typeof REMOVE_CHANNEL
   serverId: string
   channelId: string
 }
 
-interface IJoinChannelAction {
+export interface IJoinChannelAction {
   type: typeof JOIN_CHANNEL
   serverId: string
   channelId: string
 }
 
-interface IPartChannelAction {
+export interface IPartChannelAction {
   type: typeof PART_CHANNEL
   serverId: string
   channelId: string
 }
 
-interface IMarkChannelStatusAction {
+export interface IMarkChannelStatusAction {
   type: typeof MARK_CHANNEL_STATUS
   serverId: string
   channelId: string
   connected: boolean
 }
 
-interface ISelectChannelAction {
+export interface ISelectChannelAction {
   type: typeof SELECT_CHANNEL
   serverId: string
   channelId: string
 }
 
-interface ISendMessageAction {
+export interface IForcedJoinChannelAction {
+  type: typeof FORCED_JOIN_CHANNEL
+  serverId: string
+  channel: string
+}
+
+export interface ISendMessageAction {
   type: typeof SEND_MESSAGE
   serverId: string
   channelId: string
   message: string
 }
 
-interface IReceiveMessageAction {
+export interface IReceiveMessageAction {
   type: typeof RECEIVE_MESSAGE
   serverId: string
   channelId?: string
@@ -161,5 +321,6 @@ export type ConnectionsActionTypes =
   | IPartChannelAction
   | IMarkChannelStatusAction
   | ISelectChannelAction
+  | IForcedJoinChannelAction
   | ISendMessageAction
   | IReceiveMessageAction
