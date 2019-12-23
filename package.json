@@ -1,0 +1,50 @@
+{
+  "name": "atomize",
+  "version": "1.0.0",
+  "description": "An electron-based IRC client",
+  "main": "index.js",
+  "scripts": {
+    "dev": "electron-webpack dev",
+    "compile": "electron-webpack",
+    "dist": "npm run compile && electron-builder",
+    "dist:dir": "npm run dist --dir -c.compression=store -c.mac.identity=null",
+    "pretty": "prettier --write \"./**/*.{ts,tsx,yaml}\""
+  },
+  "author": "Alic Szecsei <aszecsei@gmail.com>",
+  "license": "ISC",
+  "repository": "github:aszecsei/atomize",
+  "devDependencies": {
+    "@types/electron-devtools-installer": "^2.2.0",
+    "@types/irc": "^0.3.33",
+    "@types/react": "^16.9.17",
+    "@types/react-dom": "^16.9.4",
+    "@types/react-redux": "^7.1.5",
+    "babel-plugin-polished": "^1.1.0",
+    "babel-plugin-styled-components": "^1.10.6",
+    "electron": "^7.1.7",
+    "electron-builder": "^21.2.0",
+    "electron-devtools-installer": "^2.2.4",
+    "electron-webpack": "^2.7.4",
+    "electron-webpack-ts": "^3.2.0",
+    "jest-styled-components": "^6.3.4",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.4",
+    "webpack": "^4.41.4"
+  },
+  "dependencies": {
+    "@emotion/core": "^10.0.27",
+    "@emotion/styled": "^10.0.27",
+    "electron-cfg": "^1.0.3",
+    "electron-log": "^4.0.0",
+    "electron-updater": "^4.2.0",
+    "emotion-theming": "^10.0.27",
+    "immer": "^5.1.0",
+    "irc": "^0.5.2",
+    "react": "^16.12.0",
+    "react-dom": "^16.12.0",
+    "react-redux": "^7.1.3",
+    "redux": "^4.0.4",
+    "reselect": "^4.0.0",
+    "source-map-support": "^0.5.16"
+  }
+}
