@@ -7,7 +7,7 @@ import getUrls from 'get-urls'
 import isImage from 'is-image'
 
 import { fontWeights, themeValues } from '../../theme'
-import { IMessage, MessageType } from '../../store/connections/types'
+import { IMessage } from '../../store/connections/types'
 import YouTube from 'react-youtube'
 import { toArray } from 'react-emoji-render'
 

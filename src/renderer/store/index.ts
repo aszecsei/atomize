@@ -1,6 +1,6 @@
 import connections, * as fromConnections from './connections/reducers'
 import gui, * as fromGui from './gui/reducers'
-import settings, * as fromSettings from './settings/reducers'
+import settings from './settings/reducers'
 import system, * as fromSystem from './system/reducers'
 
 import { combineReducers, createStore, applyMiddleware } from 'redux'
