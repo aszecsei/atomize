@@ -17,7 +17,8 @@ import {
 const fake_msg: IMessage = {
   id: '',
   type: MessageType.MESSAGE,
-  text: 'Hello, world! :smile:',
+  text:
+    'Hello, world! :smile: https://thumbs.gfycat.com/AridShoddyInganue-max-1mb.gif',
   sender: 'Foo Bar',
   sent: new Date(),
   isMe: false,

@@ -20,7 +20,7 @@ const linkAndEmojiProcess = (str: string, svg?: boolean) => {
   const size = svg ? '' : '72x72'
   const ext = svg ? 'svg' : 'png'
   const emojisArray = toArray(str, {
-    protocol: 'http',
+    protocol: 'https',
     baseUrl: `//twemoji.maxcdn.com/2/${svg ? 'svg/' : ''}`,
     size,
     ext,
@@ -56,11 +56,11 @@ const imageProcess = (str: string) => {
     return false
   })
   return (
-    <>
+    <div>
       {imgUrls.map((url, idx) => (
         <ChatImage src={url} key={idx} onClick={() => shell.openItem(url)} />
       ))}
-    </>
+    </div>
   )
 }
 
@@ -72,7 +72,7 @@ const youtubeProcess = (str: string) => {
     return yturlre1.exec(url)
   })
   return (
-    <>
+    <div>
       {ytUrls.map((url, idx) => {
         const reres = yturlre1.exec(url)
         let videoId = reres![5] || reres![7] || reres![11]
@@ -82,7 +82,7 @@ const youtubeProcess = (str: string) => {
           </ChatYoutube>
         )
       })}
-    </>
+    </div>
   )
 }
 

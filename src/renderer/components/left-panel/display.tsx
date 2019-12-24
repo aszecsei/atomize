@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
+import * as React from 'react'
 
 import { Icon } from '../layout/icon'
 import { Sidebar } from '../layout/sidebar'
@@ -29,6 +30,7 @@ const ServerLink = styled.a<IServerLinkProps>`
   padding-right: 8px;
   border-radius: 4px;
   transition: none;
+  cursor: pointer;
   color: ${props =>
     props.selected
       ? themeValues.interactiveActive
@@ -81,6 +83,10 @@ const ServerName = styled.div`
   display: flex;
 `
 
+const ChannelName = styled(ServerName)`
+  margin-left: 30px;
+`
+
 interface ILeftPanelProps {
   editSettings: () => void
 }
@@ -109,11 +115,20 @@ const LeftPanel = (props: ILeftPanelProps) => (
     <Scrollbars>
       <Padding />
       {[...Array(30).keys()].map(n => (
-        <ServerLink key={n} selected={n == 0}>
-          <ServerLinkLayout selected={n == 0}>
-            <ServerName>Server {n}</ServerName>
-          </ServerLinkLayout>
-        </ServerLink>
+        <React.Fragment key={n}>
+          <ServerLink key={n} selected={n == 0}>
+            <ServerLinkLayout selected={n == 0}>
+              <ServerName>Server {n}</ServerName>
+            </ServerLinkLayout>
+          </ServerLink>
+          {[...Array(3).keys()].map(nc => (
+            <ServerLink key={`channel${nc}`}>
+              <ServerLinkLayout>
+                <ChannelName>Channel {nc}</ChannelName>
+              </ServerLinkLayout>
+            </ServerLink>
+          ))}
+        </React.Fragment>
       ))}
     </Scrollbars>
   </Sidebar>
