@@ -66,6 +66,7 @@ const imageProcess = (str: string) => {
 
 const youtubeProcess = (str: string) => {
   const urls = getUrls(str)
+  // TODO: Make this not gross
   const yturlre1 = /(https?:\/\/)?(www\.)?((youtu.be\/([^?]+))|(youtube.com\/embed\/([^?]+))|(youtube.com\/watch\?(.+&)?(v=([^&]+))))/i
   const ytUrls = [...urls].filter(url => {
     return yturlre1.exec(url)
@@ -83,10 +84,6 @@ const youtubeProcess = (str: string) => {
       })}
     </>
   )
-}
-
-interface IChatContainerProps {
-  isMe?: boolean
 }
 
 const ChatYoutube = styled.div`
@@ -111,12 +108,10 @@ const ChatImage = styled.img`
   cursor: pointer;
 `
 
-const ChatContainer = styled.div<IChatContainerProps>`
+const ChatContainer = styled.div`
   overflow: hidden;
   padding: ${themeValues.messagePadding};
   border-bottom: 1px solid ${themeValues.backgroundModifierAccent};
-  background-color: ${props =>
-    props.isMe ? themeValues.backgroundModifierHover : null};
   &:last-child {
     border-bottom: 0;
   }
@@ -139,9 +134,14 @@ const ChatH2 = styled.h2`
   margin: 0;
 `
 
-const ChatUserName = styled.span`
+interface IChatUsernameProps {
+  isMe?: boolean
+}
+
+const ChatUserName = styled.span<IChatUsernameProps>`
   font-weight: ${fontWeights.normal};
-  color: ${themeValues.headerPrimary};
+  color: ${props =>
+    props.isMe ? themeValues.headerPrimary : themeValues.headerSecondary};
   font-size: 1rem;
   line-height: 1.375em;
   cursor: pointer;
@@ -167,24 +167,47 @@ const ChatContent = styled.div`
   cursor: text;
 `
 
+const SystemChatContent = styled(ChatContent)`
+  color: ${themeValues.channelsDefault};
+  font-style: italic;
+`
+
 interface IMessageProps {
   message: IMessage
 }
 
-const Message = (props: IMessageProps) => (
-  <ChatContainer isMe={props.message.isMe}>
-    <ChatHeader>
-      <ChatH2>
-        <ChatUserName>{props.message.sender}</ChatUserName>
-        <ChatTimestamp>{moment(props.message.sent).calendar()}</ChatTimestamp>
-      </ChatH2>
-    </ChatHeader>
-    <ChatContent>
-      {linkAndEmojiProcess(props.message.text)}
-      {imageProcess(props.message.text)}
-      {youtubeProcess(props.message.text)}
-    </ChatContent>
-  </ChatContainer>
-)
+const Message = (props: IMessageProps) => {
+  if (props.message.sender !== '') {
+    return (
+      <ChatContainer>
+        <ChatHeader>
+          <ChatH2>
+            <ChatUserName isMe={props.message.isMe}>
+              {props.message.sender}
+            </ChatUserName>
+            <ChatTimestamp>
+              {moment(props.message.sent).calendar()}
+            </ChatTimestamp>
+          </ChatH2>
+        </ChatHeader>
+        <ChatContent>
+          {linkAndEmojiProcess(props.message.text)}
+          {imageProcess(props.message.text)}
+          {youtubeProcess(props.message.text)}
+        </ChatContent>
+      </ChatContainer>
+    )
+  } else {
+    return (
+      <ChatContainer>
+        <SystemChatContent>
+          {linkAndEmojiProcess(props.message.text)}
+          {imageProcess(props.message.text)}
+          {youtubeProcess(props.message.text)}
+        </SystemChatContent>
+      </ChatContainer>
+    )
+  }
+}
 
 export default Message

@@ -10,10 +10,13 @@ import { Content } from './components/layout/content'
 import LeftPanel from './components/left-panel'
 import MainPanel from './components/main'
 
+import SettingsModal from './components/settings-modal'
+
 export const App = () => (
   <Provider store={store}>
     <ThemeProvider>
       <Global />
+      <SettingsModal />
       <Content>
         <LeftPanel />
         <MainPanel messages={[]} />

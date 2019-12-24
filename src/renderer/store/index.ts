@@ -37,8 +37,12 @@ export default store
 export const getSettings = (state: RootState) => state.settings
 
 // SYSTEM
-export const isAddServerModalOpen = (state: RootState) =>
-  fromSystem.isAddServerModalOpen(state.system)
+export const getAddServerModalOpen = (state: RootState) =>
+  fromSystem.getAddServerModalOpen(state.system)
+export const getAddChannelModalOpen = (state: RootState) =>
+  fromSystem.getAddChannelModalOpen(state.system)
+export const getEditSettingsModalOpen = (state: RootState) =>
+  fromSystem.getEditSettingsModalOpen(state.system)
 
 // GUI
 export const getThemeMode = (state: RootState) =>

@@ -1,11 +1,15 @@
-import * as React from 'react'
+/** @jsx jsx */
+import { jsx } from '@emotion/core'
 
+import { Icon } from '../layout/icon'
 import { Sidebar } from '../layout/sidebar'
 import ServerSearch from '../server-search'
 import Scrollbars from '../scrollbars'
 import styled from '@emotion/styled'
+import { css } from '@emotion/core'
 import { themeValues, fontWeights } from '../../theme'
 import { unselectable } from '../utils'
+import { MdSettings } from 'react-icons/md'
 
 const Padding = styled.div`
   width: 100%;
@@ -74,13 +78,34 @@ const ServerName = styled.div`
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+  display: flex;
 `
 
-interface ILeftPanelProps {}
+interface ILeftPanelProps {
+  editSettings: () => void
+}
 
 const LeftPanel = (props: ILeftPanelProps) => (
   <Sidebar>
     <ServerSearch />
+    <Padding />
+    <ServerLink onClick={props.editSettings}>
+      <ServerLinkLayout>
+        <ServerName>
+          <Icon>
+            <MdSettings />
+          </Icon>
+          <span
+            css={css`
+              margin-left: 8px;
+              margin-top: 2px;
+            `}
+          >
+            Settings
+          </span>
+        </ServerName>
+      </ServerLinkLayout>
+    </ServerLink>
     <Scrollbars>
       <Padding />
       {[...Array(30).keys()].map(n => (

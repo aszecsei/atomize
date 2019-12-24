@@ -35,8 +35,8 @@ export const themeValues = {
     light: colors.black,
   }),
   headerSecondary: theme('mode', {
-    dark: darken(0.1, colors.white),
-    light: lighten(0.1, colors.black),
+    dark: darken(0.2, colors.white),
+    light: lighten(0.2, colors.black),
   }),
   textNormal: theme('mode', {
     dark: colors.silver,
