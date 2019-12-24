@@ -38,7 +38,7 @@ import {
 import { getSettings } from '../'
 import * as irc from 'irc'
 import { ISettingsState } from '../settings/types'
-import { getServer, getChannel, getChannelByName } from './reducers'
+import { getServer, getChannel, getChannelByName } from '../'
 import { eventChannel, END, Task } from 'redux-saga'
 import {
   markServerStatus,
@@ -56,13 +56,13 @@ function* subscribeToKick(
   let channel = getChannel(yield select(), serverId, channelId) as IChannel
   const evChan = eventChannel(emit => {
     const handler = (
-      ichannel: irc.IChannel,
+      ichannel: string,
       nick: string,
       by: string,
       reason: string,
       _message: irc.IMessage
     ) => {
-      if (ichannel.name === channel.name) {
+      if (ichannel === channel.name) {
         emit(
           receiveMessage(
             parseKickMessage(
@@ -98,12 +98,12 @@ function* subscribeToPart(
   let channel = getChannel(yield select(), serverId, channelId) as IChannel
   const evChan = eventChannel(emit => {
     const handler = (
-      ichannel: irc.IChannel,
+      ichannel: string,
       nick: string,
       reason: string,
       _message: irc.IMessage
     ) => {
-      if (ichannel.name === channel.name) {
+      if (ichannel === channel.name) {
         emit(
           receiveMessage(
             parsePartMessage(
@@ -205,15 +205,12 @@ function* subscribeToJoin(
 ) {
   let channel = getChannel(yield select(), serverId, channelId) as IChannel
   const evChan = eventChannel(emit => {
-    const handler = (
-      ichannel: irc.IChannel,
-      nick: string,
-      _message: irc.IMessage
-    ) => {
+    const handler = (ichannel: string, nick: string, message: irc.IMessage) => {
+      console.log(`Join: ${JSON.stringify(ichannel)}:${nick}:${message}`)
       if (nick === client.nick && channel.name === '#') {
         // We were possibly forced to join a channel
-        emit(forcedJoinChannel(serverId, ichannel.name))
-      } else if (ichannel.name === channel.name) {
+        emit(forcedJoinChannel(serverId, ichannel))
+      } else if (ichannel === channel.name) {
         emit(
           receiveMessage(
             parseJoinMessage(
@@ -238,8 +235,10 @@ function* subscribeToJoin(
     const action = yield take(evChan)
     // First, check our forced-join actions: if the channel already exists, we just got notified that we joined it.
     if (action.type === FORCED_JOIN_CHANNEL) {
-      if (getChannelByName(yield select(), serverId, action.channel)) {
+      let chan = getChannelByName(yield select(), serverId, action.channel)
+      if (chan) {
         // The channel already exists, we just got notified that we joined it
+        yield put(markChannelStatus(serverId, chan.id, true))
         continue
       }
     }
@@ -293,23 +292,24 @@ function* subscribeToChannelMessage(
 ) {
   let channel = getChannel(yield select(), serverId, channelId) as IChannel
   const evChan = eventChannel(emit => {
-    const handler = (
-      nick: string,
-      to: string,
-      text: string,
-      _message: irc.IMessage
-    ) => {
+    const handler = (nick: string, text: string, _message: irc.IMessage) => {
       emit(
         receiveMessage(
-          parseMessage(nick, to, text, new Date(), nick === client.nick),
+          parseMessage(
+            nick,
+            channel.name,
+            text,
+            new Date(),
+            nick === client.nick
+          ),
           serverId,
           channelId
         )
       )
     }
-    client.addListener(`message#${channel.name}`, handler)
+    client.addListener(`message${channel.name}`, handler)
     return () => {
-      client.removeListener(`message#${channel.name}`, handler)
+      client.removeListener(`message${channel.name}`, handler)
     }
   })
 
@@ -383,7 +383,11 @@ function* write(client: irc.Client, serverId: string, channelId: string) {
     const payload: ISendMessageAction = yield take(SEND_MESSAGE)
     if (payload.serverId === serverId && payload.channelId === channelId) {
       // TODO: Intercept all /command messages
-      client.say(channel.name, payload.message)
+      if (channel.name === '#') {
+        client.send(payload.message)
+      } else {
+        client.say(channel.name, payload.message)
+      }
       yield put(
         receiveMessage(
           parseMessage(
@@ -509,6 +513,7 @@ function createClient(
     channels,
     debug: process.env.NODE_ENV !== 'production',
     autoConnect: false,
+    encoding: 'utf-8',
   })
 }
 
@@ -520,17 +525,21 @@ function* connectClient(serverId: string, client: irc.Client) {
     let errorListener = (message: any) => {
       console.error(message)
       emit(markServerStatus(serverId, false))
+      emit(END)
     }
     client.once('error', errorListener)
     client.connect(() => {
       console.log('Connected!')
       client.removeListener('error', errorListener)
       emit(markServerStatus(serverId, true))
+      emit(END)
     })
     return () => {}
   })
-  const action = yield take(evChannel)
-  yield put(action)
+  for (;;) {
+    const action = yield take(evChannel)
+    yield put(action)
+  }
 }
 
 // Responsible for handling a server connection. It requires the server to have already been added to the store; all we do is set up the connection.

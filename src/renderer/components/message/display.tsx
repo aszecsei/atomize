@@ -19,12 +19,17 @@ const open = (event: any) => {
 const linkAndEmojiProcess = (str: string, svg?: boolean) => {
   const size = svg ? '' : '72x72'
   const ext = svg ? 'svg' : 'png'
-  const emojisArray = toArray(str, {
-    protocol: 'https',
-    baseUrl: `//twemoji.maxcdn.com/2/${svg ? 'svg/' : ''}`,
-    size,
-    ext,
-  })
+  let emojisArray: React.ReactNodeArray = [str]
+  try {
+    emojisArray = toArray(str, {
+      protocol: 'https',
+      baseUrl: `//twemoji.maxcdn.com/2/${svg ? 'svg/' : ''}`,
+      size,
+      ext,
+    })
+  } catch (e) {
+    console.error(`Could not parse ${str}`)
+  }
   const newValues = emojisArray.map((n, idx) => {
     if (typeof n === 'string') {
       return (
