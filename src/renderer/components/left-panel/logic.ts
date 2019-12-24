@@ -2,7 +2,11 @@ import {
   toggleEditSettingsModal,
   toggleAddServerModal,
 } from '../../store/system/actions'
-import { selectChannel, selectServer } from '../../store/connections/actions'
+import {
+  selectChannel,
+  selectServer,
+  connectToServer,
+} from '../../store/connections/actions'
 import LeftPanel from './display'
 import { connect } from 'react-redux'
 import {
@@ -25,6 +29,7 @@ const mapDispatch = {
   addServer: toggleAddServerModal,
   selectChannel,
   selectServer,
+  connectToServer,
 }
 
 export default connect(mapState, mapDispatch)(LeftPanel)

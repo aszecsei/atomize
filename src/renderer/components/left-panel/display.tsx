@@ -155,6 +155,7 @@ interface IServerProps {
   selectedChannelId?: string
   selectServer: (serverId: string) => void
   selectChannel: (serverId: string, channelId: string) => void
+  connectToServer: (serverId: string) => void
 }
 
 interface IServerState {
@@ -188,6 +189,12 @@ class Server extends React.Component<IServerProps, IServerState> {
               css={css`
                 margin-left: auto;
               `}
+              onClick={e => {
+                e.stopPropagation()
+                if (!this.props.server.connected) {
+                  this.props.connectToServer(this.props.server.id)
+                }
+              }}
             >
               {this.props.server.connected ? (
                 <FaRegCheckCircle />
@@ -230,6 +237,7 @@ interface ILeftPanelProps {
   addServer: () => void
   selectServer: (serverId: string) => void
   selectChannel: (serverId: string, channelId: string) => void
+  connectToServer: (serverId: string) => void
 }
 
 const LeftPanel = (props: ILeftPanelProps) => (
@@ -281,6 +289,7 @@ const LeftPanel = (props: ILeftPanelProps) => (
           selectedChannelId={props.selectedChannelId}
           selectChannel={props.selectChannel}
           selectServer={props.selectServer}
+          connectToServer={props.connectToServer}
         />
       ))}
     </Scrollbars>
