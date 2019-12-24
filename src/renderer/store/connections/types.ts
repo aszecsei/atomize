@@ -174,6 +174,7 @@ export function parseNickChange(
 
 export interface IChannel {
   readonly id: string
+  readonly serverId: string
   readonly name: string
   readonly log: IMessage[]
   readonly connected: boolean

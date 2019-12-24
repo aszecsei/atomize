@@ -1,1 +1,1 @@
-export { default } from './display'
+export { default } from './logic'

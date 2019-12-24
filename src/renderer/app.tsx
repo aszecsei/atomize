@@ -19,7 +19,7 @@ export const App = () => (
       <SettingsModal />
       <Content>
         <LeftPanel />
-        <MainPanel messages={[]} />
+        <MainPanel />
       </Content>
     </ThemeProvider>
   </Provider>

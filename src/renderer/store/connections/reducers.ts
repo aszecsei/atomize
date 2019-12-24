@@ -29,8 +29,9 @@ function connectionsReducer(
     // SERVER CONTROL
     case ADD_SERVER:
       return produce(state, draft => {
+        let sId = uuid()
         draft.servers.push({
-          id: uuid(),
+          id: sId,
           name: action.name,
           url: action.url,
           nickname: action.nickname,
@@ -38,6 +39,7 @@ function connectionsReducer(
           channels: [
             {
               id: uuid(),
+              serverId: sId,
               name: '#',
               log: [],
               connected: false,
@@ -45,6 +47,7 @@ function connectionsReducer(
             },
             ...action.channels.map(c => ({
               id: uuid(),
+              serverId: sId,
               name: c,
               log: [],
               connected: false,
@@ -79,6 +82,7 @@ function connectionsReducer(
           .find(s => s.id === action.serverId)
           ?.channels.push({
             id: uuid(),
+            serverId: action.serverId,
             name: action.channel,
             log: [],
             connected: false,

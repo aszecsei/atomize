@@ -2,6 +2,7 @@ import * as React from 'react'
 
 import styled from '@emotion/styled'
 import { themeValues, fontWeights } from '../../theme'
+import { IChannel } from '../../store/connections/types'
 
 const SendMessageForm = styled.form`
   border-top: 1px solid ${themeValues.backgroundModifierAccent};
@@ -48,12 +49,30 @@ const TextInput = styled.input`
   }
 `
 
-interface IChatBoxProps {}
+interface IChatBoxProps {
+  selectedChannel?: IChannel
+  sendMessage: (serverId: string, channelId: string, message: string) => void
+}
 
-interface IChatBoxState {}
+interface IChatBoxState {
+  message: string
+}
 
 class ChatBox extends React.Component<IChatBoxProps, IChatBoxState> {
+  state = {
+    message: '',
+  }
+
   onFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    if (this.props.selectedChannel) {
+      if (this.state.message !== '') {
+        this.props.sendMessage(
+          this.props.selectedChannel.serverId,
+          this.props.selectedChannel.id,
+          this.state.message
+        )
+      }
+    }
     e.preventDefault()
   }
 
@@ -63,7 +82,15 @@ class ChatBox extends React.Component<IChatBoxProps, IChatBoxState> {
         <ChannelTextArea>
           <ChannelTextInner>
             <TextArea>
-              <TextInput type="text" placeholder="Send a message" />
+              <TextInput
+                type="text"
+                placeholder="Send a message"
+                disabled={this.props.selectedChannel === undefined}
+                value={this.state.message}
+                onChange={e => {
+                  this.setState({ message: e.target.value })
+                }}
+              />
             </TextArea>
           </ChannelTextInner>
         </ChannelTextArea>

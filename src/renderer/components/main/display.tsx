@@ -8,42 +8,10 @@ import Message from '../message'
 import MessageEntry from '../message-entry'
 import { Chat } from '../layout/chat'
 
-import {
-  IMessage,
-  MessageType,
-  parseJoinMessage,
-} from '../../store/connections/types'
-
-const fake_msg: IMessage = {
-  id: '',
-  type: MessageType.MESSAGE,
-  text:
-    'Hello, world! :smile: https://thumbs.gfycat.com/AridShoddyInganue-max-1mb.gif',
-  sender: 'Foo Bar',
-  sent: new Date(),
-  isMe: false,
-}
-
-const fake_system_message: IMessage = parseJoinMessage('Test User', '#channel')
-
-const fake_messages = [...Array(30).keys()].map(i => {
-  const isMe = i % 3 == 0
-
-  if (i % 5 == 0) {
-    return {
-      ...fake_system_message,
-      isMe,
-    }
-  } else {
-    return {
-      ...fake_msg,
-      isMe,
-    }
-  }
-})
+import { IMessage } from '../../store/connections/types'
 
 interface IMessageWindowProps {
-  messages: IMessage[]
+  messages?: IMessage[]
 }
 
 const Padding = styled.div`
@@ -68,7 +36,7 @@ class MessageWindow extends React.Component<IMessageWindowProps, {}> {
         <ServerSearch />
         <Scrollbars ref={this.scrollRef}>
           <Padding />
-          {fake_messages.map((im, id) => (
+          {this.props.messages?.map((im, id) => (
             <Message message={im} key={id} />
           ))}
         </Scrollbars>
