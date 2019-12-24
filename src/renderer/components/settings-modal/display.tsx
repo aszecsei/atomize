@@ -12,12 +12,11 @@ interface ISettingsModalProps {
 
 const SettingsModal = (props: ISettingsModalProps) => (
   <Modal open={props.visible} onClose={props.onClose} title="Settings">
-    <form onSubmit={() => {}}>
+    <form onSubmit={(e) => { e.preventDefault(); }}>
       <Form.Field>
         <Form.Label>Scrollback</Form.Label>
         <Form.Control>
-          <Form.Input
-            type="checkbox"
+          <Form.Checkbox
             checked={props.settings.scrollback}
             onChange={() => {
               props.onUpdate({ scrollback: !props.settings.scrollback })
@@ -25,120 +24,114 @@ const SettingsModal = (props: ISettingsModalProps) => (
           />
         </Form.Control>
       </Form.Field>
-      <label>
+      <Form.Label>
         Scrollback Lines:
-        <input
+        <Form.Input
           type="number"
           value={props.settings.scrollbackLines}
           onChange={e => {
             props.onUpdate({ scrollbackLines: e.target.valueAsNumber })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Timestamps:
-        <input
-          type="checkbox"
+        <Form.Checkbox
           checked={props.settings.timestamps}
           onChange={() => {
             props.onUpdate({ timestamps: !props.settings.timestamps })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Time Format:
-        <input
+        <Form.Input
           type="text"
           value={props.settings.timeFormat}
           onChange={e => {
             props.onUpdate({ timeFormat: e.target.value })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         URL Grabber:
-        <input
-          type="checkbox"
+        <Form.Checkbox
           checked={props.settings.urlgrabber}
           onChange={() => {
             props.onUpdate({ urlgrabber: !props.settings.urlgrabber })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Max URL Length:
-        <input
+        <Form.Input
           type="number"
           value={props.settings.maxurl}
           onChange={e => {
             props.onUpdate({ maxurl: e.target.valueAsNumber })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Auto-Away:
-        <input
-          type="checkbox"
+        <Form.Checkbox
           checked={props.settings.autoaway}
           onChange={() => {
             props.onUpdate({ autoaway: !props.settings.autoaway })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Quit Message:
-        <input
+        <Form.Input
           type="text"
           value={props.settings.defquit}
           onChange={e => {
             props.onUpdate({ defquit: e.target.value })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Leave Message:
-        <input
+        <Form.Input
           type="text"
           value={props.settings.defleave}
           onChange={e => {
             props.onUpdate({ defleave: e.target.value })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Away Message:
-        <input
+        <Form.Input
           type="text"
           value={props.settings.defaway}
           onChange={e => {
             props.onUpdate({ defaway: e.target.value })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Show Away Once:
-        <input
-          type="checkbox"
+        <Form.Checkbox
           checked={props.settings.showawayonce}
           onChange={() => {
             props.onUpdate({ showawayonce: !props.settings.showawayonce })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Hide Join:
-        <input
-          type="checkbox"
+        <Form.Checkbox
           checked={props.settings.hidejoin}
           onChange={() => {
             props.onUpdate({ hidejoin: !props.settings.hidejoin })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Hide Nickname Change:
-        <input
-          type="checkbox"
+        <Form.Checkbox
           checked={props.settings.hidenicknamechange}
           onChange={() => {
             props.onUpdate({
@@ -146,60 +139,59 @@ const SettingsModal = (props: ISettingsModalProps) => (
             })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Download Folder:
-        <input
+        <Form.Input
           type="text"
           value={props.settings.downloadFolder}
           onChange={e => {
             props.onUpdate({ downloadFolder: e.target.value })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Sound Channel:
-        <input
-          type="checkbox"
+        <Form.Checkbox
           checked={props.settings.soundChannel}
           onChange={() => {
             props.onUpdate({ soundChannel: !props.settings.soundChannel })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Sound Private:
-        <input
-          type="checkbox"
+        <Form.Checkbox
           checked={props.settings.soundPrivate}
           onChange={() => {
             props.onUpdate({ soundPrivate: !props.settings.soundPrivate })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Username:
-        <input
+        <Form.Input
           type="text"
           value={props.settings.userName}
           onChange={e => {
             props.onUpdate({ userName: e.target.value })
           }}
         />
-      </label>
-      <label>
+      </Form.Label>
+      <Form.Label>
         Real Name:
-        <input
+        <Form.Input
           type="text"
           value={props.settings.realName}
           onChange={e => {
             props.onUpdate({ realName: e.target.value })
           }}
         />
-      </label>
-      <input type="submit" value="Save" />
+      </Form.Label>
+      <Form.Input type="submit" value="Save" onClick={props.onClose} />
     </form>
   </Modal>
 )
+// TODO: add onSave functionality
 
 export default SettingsModal
