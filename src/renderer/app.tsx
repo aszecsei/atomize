@@ -9,7 +9,6 @@ import Global from './global-styles'
 import { Content } from './components/layout/content'
 import LeftPanel from './components/left-panel'
 import MainPanel from './components/main'
-import RightPanel from './components/right-panel'
 
 export const App = () => (
   <Provider store={store}>
@@ -17,8 +16,7 @@ export const App = () => (
       <Global />
       <Content>
         <LeftPanel />
-        <MainPanel />
-        <RightPanel />
+        <MainPanel messages={[]} />
       </Content>
     </ThemeProvider>
   </Provider>

@@ -2,18 +2,10 @@ import * as React from 'react'
 
 import { Sidebar } from '../layout/sidebar'
 import ServerSearch from '../server-search'
-import { Scrollbars } from 'react-custom-scrollbars'
-import { css } from '@emotion/core'
+import Scrollbars from '../scrollbars'
 import styled from '@emotion/styled'
 import { themeValues, fontWeights } from '../../theme'
-
-const ScrollbarsStyle = css`
-  position: relative;
-  display: flex;
-  height: 100%;
-  flex: 1 1 auto;
-  min-height: 0;
-`
+import { unselectable } from '../utils'
 
 const Padding = styled.div`
   width: 100%;
@@ -26,13 +18,29 @@ interface IServerLinkProps {
 const ServerLink = styled.a<IServerLinkProps>`
   max-width: 224px;
   margin-left: 8px;
+  margin-right: 8px;
   box-sizing: border-box;
   display: block;
   padding: 1px 0;
+  padding-right: 8px;
   border-radius: 4px;
   transition: none;
   color: ${props =>
-    props.selected ? themeValues.headerSecondary : themeValues.textNormal};
+    props.selected
+      ? themeValues.interactiveActive
+      : themeValues.channelsDefault};
+  &:hover {
+    color: ${props =>
+      props.selected
+        ? themeValues.interactiveActive
+        : themeValues.interactiveHover};
+  }
+  &:active {
+    color: ${props =>
+      props.selected
+        ? themeValues.interactiveActive
+        : themeValues.interactiveActive};
+  }
 `
 
 const ServerLinkLayout = styled.div<IServerLinkProps>`
@@ -43,6 +51,19 @@ const ServerLinkLayout = styled.div<IServerLinkProps>`
   padding: 0 8px;
   background-color: ${props =>
     props.selected ? themeValues.backgroundModifierSelected : null};
+  &:hover {
+    background-color: ${props =>
+      props.selected
+        ? themeValues.backgroundModifierSelected
+        : themeValues.backgroundModifierHover};
+  }
+  &:active {
+    background-color: ${props =>
+      props.selected
+        ? themeValues.backgroundModifierSelected
+        : themeValues.backgroundModifierActive};
+  }
+  ${unselectable}
 `
 
 const ServerName = styled.div`
@@ -60,7 +81,7 @@ interface ILeftPanelProps {}
 const LeftPanel = (props: ILeftPanelProps) => (
   <Sidebar>
     <ServerSearch />
-    <Scrollbars css={ScrollbarsStyle}>
+    <Scrollbars>
       <Padding />
       {[...Array(30).keys()].map(n => (
         <ServerLink key={n} selected={n == 0}>

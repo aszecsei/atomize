@@ -478,6 +478,9 @@ const GlobalStyle = css`
   button {
     border: 0;
   }
+  body {
+    text-rendering: optimizeLegibility;
+  }
   /* ================ FONTS ================ */
   /* raleway-regular - latin */
   @font-face {
