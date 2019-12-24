@@ -11,9 +11,14 @@ import { css } from '@emotion/core'
 import { themeValues, fontWeights } from '../../theme'
 import { unselectable } from '../utils'
 
-import { MdSettings } from 'react-icons/md'
+import { MdAdd, MdSettings } from 'react-icons/md'
 import { FaCaretDown, FaCaretRight, FaHashtag } from 'react-icons/fa'
 import { IChannel, IServer } from '../../store/connections/types'
+
+const Divider = styled.div`
+  border-bottom: 1px solid ${themeValues.backgroundModifierAccent};
+  margin: 8px;
+`
 
 const Padding = styled.div`
   width: 100%;
@@ -211,6 +216,7 @@ interface ILeftPanelProps {
   selectedServerId?: string
   selectedChannelId?: string
   editSettings: () => void
+  addServer: () => void
   selectServer: (serverId: string) => void
   selectChannel: (serverId: string, channelId: string) => void
 }
@@ -236,6 +242,24 @@ const LeftPanel = (props: ILeftPanelProps) => (
         </ServerName>
       </ServerLinkLayout>
     </ServerLink>
+    <ServerLink onClick={props.addServer}>
+      <ServerLinkLayout>
+        <ServerName>
+          <Icon>
+            <MdAdd />
+          </Icon>
+          <span
+            css={css`
+              margin-left: 8px;
+              margin-top: 2px;
+            `}
+          >
+            Add Server
+          </span>
+        </ServerName>
+      </ServerLinkLayout>
+    </ServerLink>
+    <Divider />
     <Scrollbars>
       <Padding />
       {props.servers.map((s, idx) => (

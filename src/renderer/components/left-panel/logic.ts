@@ -1,4 +1,7 @@
-import { toggleEditSettingsModal } from '../../store/system/actions'
+import {
+  toggleEditSettingsModal,
+  toggleAddServerModal,
+} from '../../store/system/actions'
 import { selectChannel, selectServer } from '../../store/connections/actions'
 import LeftPanel from './display'
 import { connect } from 'react-redux'
@@ -19,6 +22,7 @@ const mapState = (state: RootState) => {
 
 const mapDispatch = {
   editSettings: toggleEditSettingsModal,
+  addServer: toggleAddServerModal,
   selectChannel,
   selectServer,
 }
