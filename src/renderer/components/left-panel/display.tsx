@@ -12,7 +12,14 @@ import { themeValues, fontWeights } from '../../theme'
 import { unselectable } from '../utils'
 
 import { MdAdd, MdSettings } from 'react-icons/md'
-import { FaCaretDown, FaCaretRight, FaHashtag } from 'react-icons/fa'
+import {
+  FaCaretDown,
+  FaCaretRight,
+  FaHashtag,
+  FaRegTimesCircle,
+  FaRegCheckCircle,
+  FaEllipsisH,
+} from 'react-icons/fa'
 import { IChannel, IServer } from '../../store/connections/types'
 
 const Divider = styled.div`
@@ -84,7 +91,7 @@ const ServerName = styled.div`
   font-size: 16px;
   line-height: 20px;
   font-weight: ${fontWeights.normal};
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
@@ -124,6 +131,17 @@ class Channel extends React.Component<IChannelProps, {}> {
             >
               {this.props.channel.name}
             </span>
+            <Icon
+              css={css`
+                margin-left: auto;
+              `}
+            >
+              {this.props.channel.connected ? (
+                <FaRegCheckCircle />
+              ) : (
+                <FaRegTimesCircle />
+              )}
+            </Icon>
           </ChannelName>
         </ServerLinkLayout>
       </ServerLink>
@@ -149,29 +167,42 @@ class Server extends React.Component<IServerProps, IServerState> {
   }
 
   render() {
-    // const selected = this.props.selectedServerId === this.props.server.id
+    const f = (
+      <ServerLink
+        onClick={() => this.setState({ expanded: !this.state.expanded })}
+      >
+        <ServerLinkLayout>
+          <ServerName>
+            <Icon>
+              {this.state.expanded ? <FaCaretDown /> : <FaCaretRight />}
+            </Icon>
+            <span
+              css={css`
+                margin-left: 8px;
+                margin-top: 2px;
+              `}
+            >
+              {this.props.server.name}
+            </span>
+            <Icon
+              css={css`
+                margin-left: auto;
+              `}
+            >
+              {this.props.server.connected ? (
+                <FaRegCheckCircle />
+              ) : (
+                <FaRegTimesCircle />
+              )}
+            </Icon>
+          </ServerName>
+        </ServerLinkLayout>
+      </ServerLink>
+    )
     if (this.state.expanded) {
       return (
         <React.Fragment>
-          <ServerLink
-            onClick={() => this.setState({ expanded: !this.state.expanded })}
-          >
-            <ServerLinkLayout>
-              <ServerName>
-                <Icon>
-                  <FaCaretDown />
-                </Icon>
-                <span
-                  css={css`
-                    margin-left: 8px;
-                    margin-top: 2px;
-                  `}
-                >
-                  {this.props.server.name}
-                </span>
-              </ServerName>
-            </ServerLinkLayout>
-          </ServerLink>
+          {f}
           {this.props.server.channels.map((c, idx) => (
             <Channel
               channel={c}
@@ -186,27 +217,7 @@ class Server extends React.Component<IServerProps, IServerState> {
         </React.Fragment>
       )
     } else {
-      return (
-        <ServerLink>
-          <ServerLinkLayout
-            onClick={() => this.setState({ expanded: !this.state.expanded })}
-          >
-            <ServerName>
-              <Icon>
-                <FaCaretRight />
-              </Icon>
-              <span
-                css={css`
-                  margin-left: 8px;
-                  margin-top: 2px;
-                `}
-              >
-                {this.props.server.name}
-              </span>
-            </ServerName>
-          </ServerLinkLayout>
-        </ServerLink>
-      )
+      return f
     }
   }
 }
