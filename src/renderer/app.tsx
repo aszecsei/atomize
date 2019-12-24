@@ -10,6 +10,7 @@ import { Content } from './components/layout/content'
 import LeftPanel from './components/left-panel'
 import MainPanel from './components/main'
 
+import AddServerModal from './components/add-server-modal'
 import SettingsModal from './components/settings-modal'
 
 export const App = () => (
@@ -17,6 +18,7 @@ export const App = () => (
     <ThemeProvider>
       <Global />
       <SettingsModal />
+      <AddServerModal />
       <Content>
         <LeftPanel />
         <MainPanel />
