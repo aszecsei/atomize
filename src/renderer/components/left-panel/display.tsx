@@ -10,7 +10,9 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import { themeValues, fontWeights } from '../../theme'
 import { unselectable } from '../utils'
+
 import { MdSettings } from 'react-icons/md'
+import { FaCaretDown, FaHashtag } from 'react-icons/fa'
 
 const Padding = styled.div`
   width: 100%;
@@ -118,13 +120,37 @@ const LeftPanel = (props: ILeftPanelProps) => (
         <React.Fragment key={n}>
           <ServerLink key={n} selected={n == 0}>
             <ServerLinkLayout selected={n == 0}>
-              <ServerName>Server {n}</ServerName>
+              <ServerName>
+                <Icon>
+                  <FaCaretDown />
+                </Icon>
+                <span
+                  css={css`
+                    margin-left: 8px;
+                    margin-top: 2px;
+                  `}
+                >
+                  Server {n}
+                </span>
+              </ServerName>
             </ServerLinkLayout>
           </ServerLink>
           {[...Array(3).keys()].map(nc => (
             <ServerLink key={`channel${nc}`}>
               <ServerLinkLayout>
-                <ChannelName>Channel {nc}</ChannelName>
+                <ChannelName>
+                  <Icon>
+                    <FaHashtag />
+                  </Icon>
+                  <span
+                    css={css`
+                      margin-left: 8px;
+                      margin-top: 2px;
+                    `}
+                  >
+                    Channel {nc}
+                  </span>
+                </ChannelName>
               </ServerLinkLayout>
             </ServerLink>
           ))}
