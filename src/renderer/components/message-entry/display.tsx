@@ -71,6 +71,7 @@ class ChatBox extends React.Component<IChatBoxProps, IChatBoxState> {
           this.props.selectedChannel.id,
           this.state.message
         )
+        this.setState({ message: '' })
       }
     }
     e.preventDefault()
