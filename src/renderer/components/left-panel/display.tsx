@@ -12,7 +12,8 @@ import { themeValues, fontWeights } from '../../theme'
 import { unselectable } from '../utils'
 
 import { MdSettings } from 'react-icons/md'
-import { FaCaretDown, FaHashtag } from 'react-icons/fa'
+import { FaCaretDown, FaCaretRight, FaHashtag } from 'react-icons/fa'
+import { IChannel, IServer } from '../../store/connections/types'
 
 const Padding = styled.div`
   width: 100%;
@@ -89,8 +90,129 @@ const ChannelName = styled(ServerName)`
   margin-left: 30px;
 `
 
+interface IChannelProps {
+  channel: IChannel
+  selectedServerId?: string
+  selectedChannelId?: string
+  selectChannel: (channelId: string) => void
+}
+
+class Channel extends React.Component<IChannelProps, {}> {
+  render() {
+    return (
+      <ServerLink
+        selected={this.props.channel.id === this.props.selectedChannelId}
+        onClick={() => this.props.selectChannel(this.props.channel.id)}
+      >
+        <ServerLinkLayout
+          selected={this.props.channel.id === this.props.selectedChannelId}
+        >
+          <ChannelName>
+            <Icon>
+              <FaHashtag />
+            </Icon>
+            <span
+              css={css`
+                margin-left: 8px;
+                margin-top: 2px;
+              `}
+            >
+              {this.props.channel.name}
+            </span>
+          </ChannelName>
+        </ServerLinkLayout>
+      </ServerLink>
+    )
+  }
+}
+
+interface IServerProps {
+  server: IServer
+  selectedServerId?: string
+  selectedChannelId?: string
+  selectServer: (serverId: string) => void
+  selectChannel: (serverId: string, channelId: string) => void
+}
+
+interface IServerState {
+  expanded: boolean
+}
+
+class Server extends React.Component<IServerProps, IServerState> {
+  state = {
+    expanded: true,
+  }
+
+  render() {
+    // const selected = this.props.selectedServerId === this.props.server.id
+    if (this.state.expanded) {
+      return (
+        <React.Fragment>
+          <ServerLink
+            onClick={() => this.setState({ expanded: !this.state.expanded })}
+          >
+            <ServerLinkLayout>
+              <ServerName>
+                <Icon>
+                  <FaCaretDown />
+                </Icon>
+                <span
+                  css={css`
+                    margin-left: 8px;
+                    margin-top: 2px;
+                  `}
+                >
+                  {this.props.server.name}
+                </span>
+              </ServerName>
+            </ServerLinkLayout>
+          </ServerLink>
+          {this.props.server.channels.map((c, idx) => (
+            <Channel
+              channel={c}
+              key={idx}
+              selectedServerId={this.props.selectedServerId}
+              selectedChannelId={this.props.selectedChannelId}
+              selectChannel={(channelId: string) =>
+                this.props.selectChannel(this.props.server.id, channelId)
+              }
+            />
+          ))}
+        </React.Fragment>
+      )
+    } else {
+      return (
+        <ServerLink>
+          <ServerLinkLayout
+            onClick={() => this.setState({ expanded: !this.state.expanded })}
+          >
+            <ServerName>
+              <Icon>
+                <FaCaretRight />
+              </Icon>
+              <span
+                css={css`
+                  margin-left: 8px;
+                  margin-top: 2px;
+                `}
+              >
+                {this.props.server.name}
+              </span>
+            </ServerName>
+          </ServerLinkLayout>
+        </ServerLink>
+      )
+    }
+  }
+}
+
 interface ILeftPanelProps {
+  servers: IServer[]
+  selectedServerId?: string
+  selectedChannelId?: string
   editSettings: () => void
+  selectServer: (serverId: string) => void
+  selectChannel: (serverId: string, channelId: string) => void
 }
 
 const LeftPanel = (props: ILeftPanelProps) => (
@@ -116,45 +238,15 @@ const LeftPanel = (props: ILeftPanelProps) => (
     </ServerLink>
     <Scrollbars>
       <Padding />
-      {[...Array(30).keys()].map(n => (
-        <React.Fragment key={n}>
-          <ServerLink key={n} selected={n == 0}>
-            <ServerLinkLayout selected={n == 0}>
-              <ServerName>
-                <Icon>
-                  <FaCaretDown />
-                </Icon>
-                <span
-                  css={css`
-                    margin-left: 8px;
-                    margin-top: 2px;
-                  `}
-                >
-                  Server {n}
-                </span>
-              </ServerName>
-            </ServerLinkLayout>
-          </ServerLink>
-          {[...Array(3).keys()].map(nc => (
-            <ServerLink key={`channel${nc}`}>
-              <ServerLinkLayout>
-                <ChannelName>
-                  <Icon>
-                    <FaHashtag />
-                  </Icon>
-                  <span
-                    css={css`
-                      margin-left: 8px;
-                      margin-top: 2px;
-                    `}
-                  >
-                    Channel {nc}
-                  </span>
-                </ChannelName>
-              </ServerLinkLayout>
-            </ServerLink>
-          ))}
-        </React.Fragment>
+      {props.servers.map((s, idx) => (
+        <Server
+          server={s}
+          key={idx}
+          selectedServerId={props.selectedServerId}
+          selectedChannelId={props.selectedChannelId}
+          selectChannel={props.selectChannel}
+          selectServer={props.selectServer}
+        />
       ))}
     </Scrollbars>
   </Sidebar>
