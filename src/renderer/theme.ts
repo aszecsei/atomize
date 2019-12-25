@@ -11,7 +11,7 @@ export const colors = {
   lime: '#01FF70',
   yellow: '#FFDC00',
   orange: '#FF851B',
-  red: '#FF4136',
+  red: '#f04747',
   maroon: '#85144b',
   fuchsia: '#F012BE',
   purple: '#B10DC9',
@@ -76,6 +76,10 @@ export const themeValues = {
   channelTextAreaBackground: theme('mode', {
     dark: lighten(0.2, colors.black),
     light: darken(0.2, colors.white),
+  }),
+  backgroundFloating: theme('mode', {
+    dark: '#18191c',
+    light: '#18191c',
   }),
 
   backgroundModifierHover: theme('mode', {

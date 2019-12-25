@@ -6,6 +6,8 @@ import {
   selectChannel,
   selectServer,
   connectToServer,
+  disconnectFromServer,
+  removeServer,
 } from '../../store/connections/actions'
 import LeftPanel from './display'
 import { connect } from 'react-redux'
@@ -30,6 +32,8 @@ const mapDispatch = {
   selectChannel,
   selectServer,
   connectToServer,
+  disconnectFromServer,
+  removeServer,
 }
 
 export default connect(mapState, mapDispatch)(LeftPanel)

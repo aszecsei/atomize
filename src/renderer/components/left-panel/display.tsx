@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from '@emotion/core'
 import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 
 import { Icon } from '../layout/icon'
 import { Sidebar } from '../layout/sidebar'
@@ -10,6 +11,9 @@ import styled from '@emotion/styled'
 import { css } from '@emotion/core'
 import { themeValues, fontWeights } from '../../theme'
 import { unselectable } from '../utils'
+import { Popper } from 'react-popper'
+import * as ContextMenu from '../context-menu'
+import OutsideClickHandler from 'react-outside-click-handler'
 
 import { MdAdd, MdSettings } from 'react-icons/md'
 import {
@@ -18,9 +22,26 @@ import {
   FaHashtag,
   FaRegTimesCircle,
   FaRegCheckCircle,
-  FaEllipsisH,
 } from 'react-icons/fa'
 import { IChannel, IServer } from '../../store/connections/types'
+
+const makeVirtualReference = (
+  x: number,
+  y: number,
+  width: number = 0,
+  height: number = 0
+) => ({
+  getBoundingClientRect: () => ({
+    top: y,
+    left: x,
+    bottom: y + height,
+    right: x + width,
+    width,
+    height,
+  }),
+  clientWidth: () => width,
+  clientHeight: () => height,
+})
 
 const Divider = styled.div`
   border-bottom: 1px solid ${themeValues.backgroundModifierAccent};
@@ -156,22 +177,109 @@ interface IServerProps {
   selectServer: (serverId: string) => void
   selectChannel: (serverId: string, channelId: string) => void
   connectToServer: (serverId: string) => void
+  disconnectFromServer: (serverId: string) => void
+  removeServer: (serverId: string) => void
 }
 
 interface IServerState {
   expanded: boolean
+  contextReferenceElement?: ReturnType<typeof makeVirtualReference>
 }
 
 class Server extends React.Component<IServerProps, IServerState> {
   state = {
     expanded: true,
+    contextReferenceElement: undefined,
   }
 
   render() {
     const f = (
       <ServerLink
         onClick={() => this.setState({ expanded: !this.state.expanded })}
+        onContextMenu={e => {
+          this.setState({
+            contextReferenceElement: makeVirtualReference(
+              e.pageX,
+              e.pageY,
+              1,
+              1
+            ),
+          })
+          e.preventDefault()
+        }}
       >
+        {this.state.contextReferenceElement !== undefined
+          ? ReactDOM.createPortal(
+              <Popper
+                referenceElement={this.state.contextReferenceElement}
+                placement="bottom-start"
+                positionFixed
+              >
+                {({ ref, style, placement }) => (
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                      this.setState({ contextReferenceElement: undefined })
+                    }}
+                  >
+                    <ContextMenu.ContextMenu
+                      ref={ref}
+                      style={style}
+                      data-placement={placement}
+                      onClick={e => e.stopPropagation()}
+                    >
+                      <ContextMenu.ItemGroup>
+                        {this.props.server.connected ? (
+                          <ContextMenu.Item
+                            onClick={() => {
+                              this.props.disconnectFromServer(
+                                this.props.server.id
+                              )
+                              this.setState({
+                                contextReferenceElement: undefined,
+                              })
+                            }}
+                          >
+                            <ContextMenu.Label>Disconnect</ContextMenu.Label>
+                          </ContextMenu.Item>
+                        ) : (
+                          <ContextMenu.Item
+                            onClick={() => {
+                              this.props.connectToServer(this.props.server.id)
+                              this.setState({
+                                contextReferenceElement: undefined,
+                              })
+                            }}
+                          >
+                            <ContextMenu.Label>Connect</ContextMenu.Label>
+                          </ContextMenu.Item>
+                        )}
+                      </ContextMenu.ItemGroup>
+                      <ContextMenu.ItemGroup>
+                        <ContextMenu.Item>
+                          <ContextMenu.Label>Add Channel</ContextMenu.Label>
+                        </ContextMenu.Item>
+                        <ContextMenu.Item>
+                          <ContextMenu.Label>Edit Settings</ContextMenu.Label>
+                        </ContextMenu.Item>
+                        <ContextMenu.Item
+                          itemStyle="danger"
+                          onClick={() => {
+                            this.props.removeServer(this.props.server.id)
+                            this.setState({
+                              contextReferenceElement: undefined,
+                            })
+                          }}
+                        >
+                          <ContextMenu.Label>Delete Server</ContextMenu.Label>
+                        </ContextMenu.Item>
+                      </ContextMenu.ItemGroup>
+                    </ContextMenu.ContextMenu>
+                  </OutsideClickHandler>
+                )}
+              </Popper>,
+              document.querySelector('#popouts')!
+            )
+          : null}
         <ServerLinkLayout>
           <ServerName>
             <Icon>
@@ -189,12 +297,6 @@ class Server extends React.Component<IServerProps, IServerState> {
               css={css`
                 margin-left: auto;
               `}
-              onClick={e => {
-                e.stopPropagation()
-                if (!this.props.server.connected) {
-                  this.props.connectToServer(this.props.server.id)
-                }
-              }}
             >
               {this.props.server.connected ? (
                 <FaRegCheckCircle />
@@ -238,6 +340,8 @@ interface ILeftPanelProps {
   selectServer: (serverId: string) => void
   selectChannel: (serverId: string, channelId: string) => void
   connectToServer: (serverId: string) => void
+  disconnectFromServer: (serverId: string) => void
+  removeServer: (serverId: string) => void
 }
 
 const LeftPanel = (props: ILeftPanelProps) => (
@@ -290,6 +394,8 @@ const LeftPanel = (props: ILeftPanelProps) => (
           selectChannel={props.selectChannel}
           selectServer={props.selectServer}
           connectToServer={props.connectToServer}
+          disconnectFromServer={props.disconnectFromServer}
+          removeServer={props.removeServer}
         />
       ))}
     </Scrollbars>
