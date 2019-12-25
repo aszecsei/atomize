@@ -25,5 +25,7 @@ jobs:
       - run: npm install
       - run: npm run pretty:ci
       - run: npm test
+      - run: npm build
         env:
           CI: true
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

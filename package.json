@@ -6,11 +6,12 @@
   "scripts": {
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
-    "dist": "npm run compile && electron-builder",
-    "dist:dir": "npm run dist --dir -c.compression=store -c.mac.identity=null",
+    "build": "npm run compile && electron-builder",
+    "build:dir": "npm run dist --dir -c.compression=store -c.mac.identity=null",
     "pretty": "prettier --write \"./**/*.{ts,tsx,yaml}\"",
     "pretty:ci": "prettier --check \"./**/*.{ts,tsx,yaml}\"",
-    "test": "jest"
+    "test": "jest",
+    "release": "build"
   },
   "author": "Alic Szecsei <aszecsei@gmail.com>",
   "license": "ISC",
