@@ -2,7 +2,7 @@ import * as React from 'react'
 
 import styled from '@emotion/styled'
 import { themeValues, fontWeights } from '../../theme'
-import { IChannel } from '../../store/connections/types'
+import { IChannel, ConnectionStatus } from '../../store/connections/types'
 
 const SendMessageForm = styled.form`
   border-top: 1px solid ${themeValues.backgroundModifierAccent};
@@ -86,7 +86,11 @@ class ChatBox extends React.Component<IChatBoxProps, IChatBoxState> {
               <TextInput
                 type="text"
                 placeholder="Send a message"
-                disabled={this.props.selectedChannel === undefined}
+                disabled={
+                  this.props.selectedChannel === undefined ||
+                  this.props.selectedChannel.connected !==
+                    ConnectionStatus.Connected
+                }
                 value={this.state.message}
                 onChange={e => {
                   this.setState({ message: e.target.value })

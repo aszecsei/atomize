@@ -1,5 +1,6 @@
 import {
   CONNECT_TO_SERVER,
+  ConnectionStatus,
   IConnectToServerAction,
   IChannel,
   IDisconnectFromServerAction,
@@ -205,8 +206,11 @@ function* subscribeToJoin(
 ) {
   let channel = getChannel(yield select(), serverId, channelId) as IChannel
   const evChan = eventChannel(emit => {
-    const handler = (ichannel: string, nick: string, message: irc.IMessage) => {
-      console.log(`Join: ${JSON.stringify(ichannel)}:${nick}:${message}`)
+    const handler = (
+      ichannel: string,
+      nick: string,
+      _message: irc.IMessage
+    ) => {
       if (nick === client.nick && channel.name === '#') {
         // We were possibly forced to join a channel
         emit(forcedJoinChannel(serverId, ichannel))
@@ -238,7 +242,9 @@ function* subscribeToJoin(
       let chan = getChannelByName(yield select(), serverId, action.channel)
       if (chan) {
         // The channel already exists, we just got notified that we joined it
-        yield put(markChannelStatus(serverId, chan.id, true))
+        yield put(
+          markChannelStatus(serverId, chan.id, ConnectionStatus.Connected)
+        )
         continue
       }
     }
@@ -433,7 +439,9 @@ function* handleChannel(
 
       // If we're parting, set the channel status
       if (payload.type === PART_CHANNEL) {
-        yield put(markChannelStatus(serverId, channelId, false))
+        yield put(
+          markChannelStatus(serverId, channelId, ConnectionStatus.NotConnected)
+        )
       }
 
       // Exit the loop
@@ -457,7 +465,13 @@ function* handleJoinChannels(client: irc.Client, serverId: string) {
           const evChannel = eventChannel(emit => {
             console.log('Connecting...')
             client.join(channel.name, () => {
-              emit(markChannelStatus(payload.serverId, payload.channelId, true))
+              emit(
+                markChannelStatus(
+                  payload.serverId,
+                  payload.channelId,
+                  ConnectionStatus.Connecting
+                )
+              )
               emit(END)
             })
             return () => {}
@@ -490,7 +504,13 @@ function* handleForcedJoinChannels(client: irc.Client, serverId: string) {
       // Make sure the channel exists - it should!
       if (channel) {
         // We've already been joined to the channel
-        yield put(markChannelStatus(payload.serverId, channel.id, true))
+        yield put(
+          markChannelStatus(
+            payload.serverId,
+            channel.id,
+            ConnectionStatus.Connected
+          )
+        )
         // Start a channel listener
         yield fork(handleChannel, client, serverId, channel.id)
       } else {
@@ -524,14 +544,14 @@ function* connectClient(serverId: string, client: irc.Client) {
 
     let errorListener = (message: any) => {
       console.error(message)
-      emit(markServerStatus(serverId, false))
+      emit(markServerStatus(serverId, ConnectionStatus.NotConnected))
       emit(END)
     }
     client.once('error', errorListener)
     client.connect(() => {
       console.log('Connected!')
       client.removeListener('error', errorListener)
-      emit(markServerStatus(serverId, true))
+      emit(markServerStatus(serverId, ConnectionStatus.Connected))
       emit(END)
     })
     return () => {}
@@ -604,7 +624,23 @@ function* handleServer(payload: IConnectToServerAction) {
 
           // If we're disconnecting, mark the server as disconnected
           if (action.type === DISCONNECT_FROM_SERVER) {
-            yield put(markServerStatus(action.serverId, false))
+            yield put(
+              markServerStatus(action.serverId, ConnectionStatus.NotConnected)
+            )
+
+            // Also mark all the channels as disconnected!
+            serverData = getServer(yield select(), payload.serverId)
+            yield all(
+              serverData!.channels.map(c =>
+                put(
+                  markChannelStatus(
+                    action.serverId,
+                    c.id,
+                    ConnectionStatus.NotConnected
+                  )
+                )
+              )
+            )
           }
 
           // Exit the loop
@@ -622,6 +658,7 @@ function* handleServer(payload: IConnectToServerAction) {
 export function* connectionsSaga() {
   for (;;) {
     const payload = yield take(CONNECT_TO_SERVER)
+    yield put(markServerStatus(payload.serverId, ConnectionStatus.Connecting))
     yield spawn(handleServer, payload)
   }
 }
