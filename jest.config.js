@@ -9,4 +9,7 @@ module.exports = {
   },
   snapshotSerializers: ['jest-emotion', 'enzyme-to-json/serializer'],
   setupFilesAfterEnv: ['<rootDir>/src/setupEnzyme.ts'],
+  collectCoverage: true,
+  collectCoverageFrom: ['src/**/*.{ts,tsx}'],
+  coverageReporters: ['lcov', 'text'],
 }
