@@ -13,7 +13,7 @@
     "pretty:ci": "prettier --check \"./**/*.{ts,tsx,yaml}\"",
     "test": "jest",
     "test:watch": "jest --watch",
-    "release": "build",
+    "release": "standard-version",
     "commit": "git-cz"
   },
   "author": "Alic Szecsei <aszecsei@gmail.com>",
@@ -53,6 +53,7 @@
     "jest-emotion": "^10.0.27",
     "prettier": "^1.19.1",
     "rimraf": "^3.0.0",
+    "standard-version": "^7.0.1",
     "ts-jest": "^24.2.0",
     "typescript": "^3.7.4",
     "webpack": "4.40.0"
