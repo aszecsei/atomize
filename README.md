@@ -2,6 +2,10 @@
 
 > An electron-based IRC client with modern sensibilities.
 
+[![Build Status](https://github.com/aszecsei/atomize/workflows/build/badge.svg)](https://github.com/aszecsei/atomize/actions?query=workflow%3Abuild)
+
+[![Coverage Status](https://coveralls.io/repos/github/aszecsei/atomize/badge.svg?branch=master)](https://coveralls.io/github/aszecsei/atomize?branch=master)
+
 ## What Is Atomize?
 
 Atomize is an IRC client. Rather than using clients that were made a decade ago (and look it), Atomize lets you connect to existing IRC channels and servers with a sleek, modern interface inspired by other modern messaging applications.
