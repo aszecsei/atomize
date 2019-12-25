@@ -2,6 +2,11 @@ import * as React from 'react'
 import Modal from '../layout/modal'
 import * as Form from '../forms'
 import produce from 'immer'
+import styled from '@emotion/styled'
+
+const HPadding = styled.div`
+  width: 16px;
+`
 
 interface IAddServerModalProps {
   visible?: boolean
@@ -39,10 +44,10 @@ class AddServerModal extends React.Component<
         open={this.props.visible}
         onClose={this.props.onClose}
       >
-        <form onSubmit={() => {}}>
+        <Form.Form onSubmit={() => {}}>
           <Form.Field>
-            <Form.Label>Server Name</Form.Label>
             <Form.Control>
+              <Form.Label>Server Name</Form.Label>
               <Form.Input
                 type="text"
                 value={this.state.name}
@@ -51,10 +56,8 @@ class AddServerModal extends React.Component<
                 }}
               />
             </Form.Control>
-          </Form.Field>
-          <Form.Field>
-            <Form.Label>Server URL</Form.Label>
             <Form.Control>
+              <Form.Label>Server URL</Form.Label>
               <Form.Input
                 type="text"
                 value={this.state.url}
@@ -63,10 +66,8 @@ class AddServerModal extends React.Component<
                 }}
               />
             </Form.Control>
-          </Form.Field>
-          <Form.Field>
-            <Form.Label>Nickname</Form.Label>
             <Form.Control>
+              <Form.Label>Nickname</Form.Label>
               <Form.Input
                 type="text"
                 value={this.state.nickname}
@@ -92,7 +93,9 @@ class AddServerModal extends React.Component<
                     )
                   }}
                 />
-                <button
+                <HPadding />
+                <Form.Button
+                  btnStyle="warning"
                   onClick={e => {
                     this.setState(
                       produce(draft => {
@@ -103,10 +106,11 @@ class AddServerModal extends React.Component<
                   }}
                 >
                   Remove Channel
-                </button>
+                </Form.Button>
               </Form.Control>
             ))}
-            <button
+            <Form.Button
+              btnStyle="primary"
               onClick={e => {
                 this.setState(
                   produce(draft => {
@@ -117,27 +121,38 @@ class AddServerModal extends React.Component<
               }}
             >
               Add Channel
-            </button>
+            </Form.Button>
           </Form.Field>
-          <Form.Field>
-            <Form.Control>
-              <button
-                onClick={e => {
-                  e.preventDefault()
-                  this.props.addServer(
-                    this.state.name,
-                    this.state.url,
-                    this.state.nickname,
-                    this.state.channels
-                  )
-                  this.props.onClose()
-                }}
-              >
-                Add Server
-              </button>
-            </Form.Control>
-          </Form.Field>
-        </form>
+          <Form.ButtonGroup direction="horizontal">
+            <Form.Button
+              type="submit"
+              btnStyle="success"
+              onClick={e => {
+                e.preventDefault()
+                this.props.addServer(
+                  this.state.name,
+                  this.state.url,
+                  this.state.nickname,
+                  this.state.channels
+                )
+                this.props.onClose()
+              }}
+            >
+              Add Server
+            </Form.Button>
+
+            <Form.Button
+              type="button"
+              btnStyle="danger"
+              align="right"
+              onClick={e => {
+                this.props.onClose()
+              }}
+            >
+              Cancel
+            </Form.Button>
+          </Form.ButtonGroup>
+        </Form.Form>
       </Modal>
     )
   }

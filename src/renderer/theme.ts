@@ -3,11 +3,11 @@ import { darken, lighten, rgba, hsla } from 'polished'
 
 export const colors = {
   navy: '#001f3f',
-  blue: '#0074D9',
+  blue: '#007bff',
   aqua: '#7FDBFF',
   teal: '#39CCCC',
   olive: '#3D9970',
-  green: '#2ECC40',
+  green: '#28a745',
   lime: '#01FF70',
   yellow: '#FFDC00',
   orange: '#FF851B',
@@ -94,6 +94,13 @@ export const themeValues = {
     dark: hsla(0, 0, 100, 0.06),
     light: hsla(0, 0, 0, 0.06),
   }),
+
+  colorPrimary: rgba(107, 109, 210, 1),
+  colorLink: colors.blue,
+  colorInfo: colors.aqua,
+  colorSuccess: colors.green,
+  colorWarning: colors.yellow,
+  colorDanger: colors.red,
 
   elevationLow:
     '0 1px 0 rgba(4,4,5,0.2),0 1.5px 0 rgba(6,6,7,0.05),0 2px 0 rgba(4,4,5,0.05);',

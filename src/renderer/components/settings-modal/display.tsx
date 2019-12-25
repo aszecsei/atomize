@@ -12,20 +12,22 @@ interface ISettingsModalProps {
 
 const SettingsModal = (props: ISettingsModalProps) => (
   <Modal open={props.visible} onClose={props.onClose} title="Settings">
-    <form onSubmit={(e) => { e.preventDefault(); }}>
-      <Form.Field>
-        <Form.Label>Scrollback</Form.Label>
-        <Form.Control>
-          <Form.Checkbox
-            checked={props.settings.scrollback}
-            onChange={() => {
-              props.onUpdate({ scrollback: !props.settings.scrollback })
-            }}
-          />
-        </Form.Control>
-      </Form.Field>
-      <Form.Label>
-        Scrollback Lines:
+    <Form.Form
+      onSubmit={e => {
+        e.preventDefault()
+      }}
+    >
+      <Form.Control>
+        <Form.Label>Scrollback:</Form.Label>
+        <Form.Checkbox
+          checked={props.settings.scrollback}
+          onChange={() => {
+            props.onUpdate({ scrollback: !props.settings.scrollback })
+          }}
+        />
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Scrollback Lines:</Form.Label>
         <Form.Input
           type="number"
           value={props.settings.scrollbackLines}
@@ -33,18 +35,18 @@ const SettingsModal = (props: ISettingsModalProps) => (
             props.onUpdate({ scrollbackLines: e.target.valueAsNumber })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Timestamps:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Timestamps:</Form.Label>
         <Form.Checkbox
           checked={props.settings.timestamps}
           onChange={() => {
             props.onUpdate({ timestamps: !props.settings.timestamps })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Time Format:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Time Format:</Form.Label>
         <Form.Input
           type="text"
           value={props.settings.timeFormat}
@@ -52,18 +54,18 @@ const SettingsModal = (props: ISettingsModalProps) => (
             props.onUpdate({ timeFormat: e.target.value })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        URL Grabber:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>URL Grabber:</Form.Label>
         <Form.Checkbox
           checked={props.settings.urlgrabber}
           onChange={() => {
             props.onUpdate({ urlgrabber: !props.settings.urlgrabber })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Max URL Length:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Max URL Length:</Form.Label>
         <Form.Input
           type="number"
           value={props.settings.maxurl}
@@ -71,18 +73,18 @@ const SettingsModal = (props: ISettingsModalProps) => (
             props.onUpdate({ maxurl: e.target.valueAsNumber })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Auto-Away:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Auto-Away:</Form.Label>
         <Form.Checkbox
           checked={props.settings.autoaway}
           onChange={() => {
             props.onUpdate({ autoaway: !props.settings.autoaway })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Quit Message:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Quit Message:</Form.Label>
         <Form.Input
           type="text"
           value={props.settings.defquit}
@@ -90,9 +92,9 @@ const SettingsModal = (props: ISettingsModalProps) => (
             props.onUpdate({ defquit: e.target.value })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Leave Message:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Leave Message:</Form.Label>
         <Form.Input
           type="text"
           value={props.settings.defleave}
@@ -100,9 +102,9 @@ const SettingsModal = (props: ISettingsModalProps) => (
             props.onUpdate({ defleave: e.target.value })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Away Message:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Away Message:</Form.Label>
         <Form.Input
           type="text"
           value={props.settings.defaway}
@@ -110,27 +112,27 @@ const SettingsModal = (props: ISettingsModalProps) => (
             props.onUpdate({ defaway: e.target.value })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Show Away Once:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Show Away Once:</Form.Label>
         <Form.Checkbox
           checked={props.settings.showawayonce}
           onChange={() => {
             props.onUpdate({ showawayonce: !props.settings.showawayonce })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Hide Join:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Hide Join:</Form.Label>
         <Form.Checkbox
           checked={props.settings.hidejoin}
           onChange={() => {
             props.onUpdate({ hidejoin: !props.settings.hidejoin })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Hide Nickname Change:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Hide Nickname Change:</Form.Label>
         <Form.Checkbox
           checked={props.settings.hidenicknamechange}
           onChange={() => {
@@ -139,9 +141,9 @@ const SettingsModal = (props: ISettingsModalProps) => (
             })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Download Folder:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Download Folder:</Form.Label>
         <Form.Input
           type="text"
           value={props.settings.downloadFolder}
@@ -149,27 +151,27 @@ const SettingsModal = (props: ISettingsModalProps) => (
             props.onUpdate({ downloadFolder: e.target.value })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Sound Channel:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Sound Channel:</Form.Label>
         <Form.Checkbox
           checked={props.settings.soundChannel}
           onChange={() => {
             props.onUpdate({ soundChannel: !props.settings.soundChannel })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Sound Private:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Sound Private:</Form.Label>
         <Form.Checkbox
           checked={props.settings.soundPrivate}
           onChange={() => {
             props.onUpdate({ soundPrivate: !props.settings.soundPrivate })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Username:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Username:</Form.Label>
         <Form.Input
           type="text"
           value={props.settings.userName}
@@ -177,9 +179,9 @@ const SettingsModal = (props: ISettingsModalProps) => (
             props.onUpdate({ userName: e.target.value })
           }}
         />
-      </Form.Label>
-      <Form.Label>
-        Real Name:
+      </Form.Control>
+      <Form.Control>
+        <Form.Label>Real Name:</Form.Label>
         <Form.Input
           type="text"
           value={props.settings.realName}
@@ -187,9 +189,21 @@ const SettingsModal = (props: ISettingsModalProps) => (
             props.onUpdate({ realName: e.target.value })
           }}
         />
-      </Form.Label>
-      <Form.Input type="submit" value="Save" onClick={props.onClose} />
-    </form>
+      </Form.Control>
+      <Form.ButtonGroup direction="horizontal">
+        <Form.Button type="submit" btnStyle="success">
+          Save
+        </Form.Button>
+        <Form.Button
+          type="button"
+          onClick={props.onClose}
+          align="right"
+          btnStyle="danger"
+        >
+          Cancel
+        </Form.Button>
+      </Form.ButtonGroup>
+    </Form.Form>
   </Modal>
 )
 // TODO: add onSave functionality
