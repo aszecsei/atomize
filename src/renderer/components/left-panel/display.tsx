@@ -22,8 +22,24 @@ import {
   FaHashtag,
   FaRegTimesCircle,
   FaRegCheckCircle,
+  FaRegHourglass,
 } from 'react-icons/fa'
-import { IChannel, IServer } from '../../store/connections/types'
+import {
+  IChannel,
+  IServer,
+  ConnectionStatus,
+} from '../../store/connections/types'
+
+const getIcon = (status: ConnectionStatus) => {
+  switch (status) {
+    case ConnectionStatus.NotConnected:
+      return <FaRegTimesCircle />
+    case ConnectionStatus.Connecting:
+      return <FaRegHourglass />
+    case ConnectionStatus.Connected:
+      return <FaRegCheckCircle />
+  }
+}
 
 const makeVirtualReference = (
   x: number,
@@ -157,11 +173,7 @@ class Channel extends React.Component<IChannelProps, {}> {
                 margin-left: auto;
               `}
             >
-              {this.props.channel.connected ? (
-                <FaRegCheckCircle />
-              ) : (
-                <FaRegTimesCircle />
-              )}
+              {getIcon(this.props.channel.connected)}
             </Icon>
           </ChannelName>
         </ServerLinkLayout>
@@ -298,11 +310,7 @@ class Server extends React.Component<IServerProps, IServerState> {
                 margin-left: auto;
               `}
             >
-              {this.props.server.connected ? (
-                <FaRegCheckCircle />
-              ) : (
-                <FaRegTimesCircle />
-              )}
+              {getIcon(this.props.server.connected)}
             </Icon>
           </ServerName>
         </ServerLinkLayout>

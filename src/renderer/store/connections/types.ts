@@ -1,5 +1,11 @@
 import { v4 as uuid } from 'uuid'
 
+export enum ConnectionStatus {
+  NotConnected,
+  Connecting,
+  Connected,
+}
+
 export enum MessageType {
   MESSAGE,
   NICKCHANGE,
@@ -177,7 +183,7 @@ export interface IChannel {
   readonly serverId: string
   readonly name: string
   readonly log: IMessage[]
-  readonly connected: boolean
+  readonly connected: ConnectionStatus
   readonly isUnread: boolean
 }
 
@@ -189,7 +195,7 @@ export interface IServer {
   readonly defaultChannels: string[]
   readonly channels: IChannel[]
   readonly log: IMessage[]
-  readonly connected: boolean
+  readonly connected: ConnectionStatus
 }
 
 export interface IConnectionsState {
@@ -244,7 +250,7 @@ export interface IDisconnectFromServerAction {
 export interface IMarkServerStatusAction {
   type: typeof MARK_SERVER_STATUS
   serverId: string
-  connected: boolean
+  connected: ConnectionStatus
 }
 
 export interface ISelectServerAction {
@@ -280,7 +286,7 @@ export interface IMarkChannelStatusAction {
   type: typeof MARK_CHANNEL_STATUS
   serverId: string
   channelId: string
-  connected: boolean
+  connected: ConnectionStatus
 }
 
 export interface ISelectChannelAction {

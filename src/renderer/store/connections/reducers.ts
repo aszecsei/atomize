@@ -1,6 +1,7 @@
 import {
   IConnectionsState,
   ConnectionsActionTypes,
+  ConnectionStatus,
   REMOVE_SERVER,
   SELECT_SERVER,
   ADD_CHANNEL,
@@ -42,7 +43,7 @@ function connectionsReducer(
               serverId: sId,
               name: '#',
               log: [],
-              connected: false,
+              connected: ConnectionStatus.NotConnected,
               isUnread: false,
             },
             ...action.channels.map(c => ({
@@ -50,12 +51,12 @@ function connectionsReducer(
               serverId: sId,
               name: c,
               log: [],
-              connected: false,
+              connected: ConnectionStatus.NotConnected,
               isUnread: false,
             })),
           ],
           log: [],
-          connected: false,
+          connected: ConnectionStatus.NotConnected,
         })
       })
     case REMOVE_SERVER:
@@ -67,6 +68,9 @@ function connectionsReducer(
         let s = draft.servers.find(s => s.id === action.serverId)
         if (s !== undefined) {
           s.connected = action.connected
+
+          // Also mark the '#' server channel
+          s.channels.find(c => c.name === '#')!.connected = action.connected
         }
       })
     case SELECT_SERVER:
@@ -85,7 +89,7 @@ function connectionsReducer(
             serverId: action.serverId,
             name: action.channel,
             log: [],
-            connected: false,
+            connected: ConnectionStatus.NotConnected,
             isUnread: false,
           })
       })

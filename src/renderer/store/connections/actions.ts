@@ -1,6 +1,7 @@
 import {
   IMessage,
   ConnectionsActionTypes,
+  ConnectionStatus,
   ADD_SERVER,
   REMOVE_SERVER,
   CONNECT_TO_SERVER,
@@ -56,7 +57,7 @@ export function disconnectFromServer(serverId: string): ConnectionsActionTypes {
 
 export function markServerStatus(
   serverId: string,
-  connected: boolean
+  connected: ConnectionStatus
 ): ConnectionsActionTypes {
   return {
     type: MARK_SERVER_STATUS,
@@ -119,7 +120,7 @@ export function partChannel(
 export function markChannelStatus(
   serverId: string,
   channelId: string,
-  connected: boolean
+  connected: ConnectionStatus
 ): ConnectionsActionTypes {
   return {
     type: MARK_CHANNEL_STATUS,
