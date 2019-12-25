@@ -3,7 +3,6 @@
 > An electron-based IRC client with modern sensibilities.
 
 [![Build Status](https://github.com/aszecsei/atomize/workflows/build/badge.svg)](https://github.com/aszecsei/atomize/actions?query=workflow%3Abuild)
-
 [![Coverage Status](https://coveralls.io/repos/github/aszecsei/atomize/badge.svg?branch=master)](https://coveralls.io/github/aszecsei/atomize?branch=master)
 
 ## What Is Atomize?
