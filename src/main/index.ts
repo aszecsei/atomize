@@ -9,6 +9,7 @@ import { autoUpdater } from 'electron-updater'
 import * as log from 'electron-log'
 import * as fs from 'fs'
 import * as os from 'os'
+import cfg from 'electron-cfg'
 
 import {
   SAVE_FILE,
@@ -30,7 +31,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 let mainWindow: BrowserWindow | null
 
 export function createMainWindow() {
-  const window = new BrowserWindow({
+  const window = cfg.window().create({
     frame: true,
     height: 720,
     width: 1280,
