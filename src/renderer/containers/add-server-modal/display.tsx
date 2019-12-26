@@ -1,6 +1,6 @@
 import * as React from 'react'
-import Modal from '../layout/modal'
-import * as Form from '../forms'
+import Modal from '../../components/layout/modal'
+import * as Form from '../../components/forms'
 import produce from 'immer'
 import styled from '@emotion/styled'
 

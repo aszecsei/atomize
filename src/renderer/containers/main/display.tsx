@@ -6,7 +6,7 @@ import { Scrollbars } from 'react-custom-scrollbars'
 import ServerSearch from '../server-search'
 import Message from '../message'
 import MessageEntry from '../message-entry'
-import { Chat } from '../layout/chat'
+import { Chat } from '../../components/layout/chat'
 
 import { IMessage } from '../../store/connections/types'
 

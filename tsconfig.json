@@ -4,5 +4,6 @@
     "jsx": "react",
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true
-  }
+  },
+  "exclude": ["node_modules", "build", "scripts"]
 }

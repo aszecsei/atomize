@@ -1,5 +1,5 @@
 import styled from '@emotion/styled'
-import { fontWeights, themeValues } from '../../theme'
+import { fontWeights, themeValues } from '../theme'
 
 export const ContextMenu = styled.div`
   position: fixed;

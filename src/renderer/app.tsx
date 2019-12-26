@@ -3,15 +3,15 @@ import * as React from 'react'
 import { Provider } from 'react-redux'
 import store from './store'
 
-import ThemeProvider from './components/theme-provider'
+import ThemeProvider from './containers/theme-provider'
 import Global from './global-styles'
 
 import { Content } from './components/layout/content'
-import LeftPanel from './components/left-panel'
-import MainPanel from './components/main'
+import LeftPanel from './containers/left-panel'
+import MainPanel from './containers/main'
 
-import AddServerModal from './components/add-server-modal'
-import SettingsModal from './components/settings-modal'
+import AddServerModal from './containers/add-server-modal'
+import SettingsModal from './containers/settings-modal'
 
 import { setup } from './persistence'
 
