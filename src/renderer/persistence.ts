@@ -18,7 +18,7 @@ import {
   READ_FILE_RESULT,
 } from '../common/ipc'
 
-function saveFile<T>(filename: string, data: T) {
+export function saveFile<T>(filename: string, data: T) {
   return new Promise((resolve, reject) => {
     const saveGuid = uuid()
     ipcRenderer.send(SAVE_FILE, filename, data, saveGuid)
@@ -35,7 +35,7 @@ function saveFile<T>(filename: string, data: T) {
   })
 }
 
-function readFile<T>(filename: string): Promise<T> {
+export function readFile<T>(filename: string): Promise<T> {
   return new Promise((resolve, reject) => {
     const readGuid = uuid()
     ipcRenderer.send(READ_FILE, filename, readGuid)
@@ -52,21 +52,21 @@ function readFile<T>(filename: string): Promise<T> {
   })
 }
 
-const SETTINGS_FILENAME = 'settings.ato'
+export const SETTINGS_FILENAME = 'settings.ato'
 
-interface IPersistedSettings {
+export interface IPersistedSettings {
   settings: ISettingsState
   theme: IThemeState
 }
 
-const getPersistedSettings = (state: RootState): IPersistedSettings => {
+export const getPersistedSettings = (state: RootState): IPersistedSettings => {
   return {
     settings: state.settings,
     theme: state.gui,
   }
 }
 
-const hydrateSettings = (state: IPersistedSettings) => {
+export const hydrateSettings = (state: IPersistedSettings) => {
   // First, the settings proper
   store.dispatch(editSettings(state.settings))
 
@@ -77,22 +77,24 @@ const hydrateSettings = (state: IPersistedSettings) => {
 
 const CONNECTIONS_FILENAME = 'connections.ato'
 
-interface IPersistedChannel {
+export interface IPersistedChannel {
   name: string
 }
 
-interface IPersistedServer {
+export interface IPersistedServer {
   name: string
   url: string
   nickname: string
   channels: IPersistedChannel[]
 }
 
-interface IPersistedConnections {
+export interface IPersistedConnections {
   servers: IPersistedServer[]
 }
 
-const getPersistedConnections = (state: RootState): IPersistedConnections => {
+export const getPersistedConnections = (
+  state: RootState
+): IPersistedConnections => {
   return {
     servers: state.connections.servers.map(s => ({
       name: s.name,
@@ -107,7 +109,7 @@ const getPersistedConnections = (state: RootState): IPersistedConnections => {
   }
 }
 
-const hydrateConnections = (state: IPersistedConnections) => {
+export const hydrateConnections = (state: IPersistedConnections) => {
   state.servers.forEach(s => {
     store.dispatch(
       addServer(
