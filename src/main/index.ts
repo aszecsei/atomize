@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain, IpcMainEvent } from 'electron'
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
   REDUX_DEVTOOLS,
@@ -7,6 +7,17 @@ import * as path from 'path'
 import { format as formatUrl } from 'url'
 import { autoUpdater } from 'electron-updater'
 import * as log from 'electron-log'
+import * as fs from 'fs'
+import * as os from 'os'
+import cfg from 'electron-cfg'
+
+import {
+  SAVE_FILE,
+  SAVE_FILE_RESULT,
+  READ_FILE,
+  READ_FILE_RESULT,
+  SHOULD_CLOSE,
+} from '../common/ipc'
 
 /*
 const appName = 'Atomize'
@@ -20,7 +31,7 @@ const isDevelopment = process.env.NODE_ENV !== 'production'
 let mainWindow: BrowserWindow | null
 
 export function createMainWindow() {
-  const window = new BrowserWindow({
+  const window = cfg.window().create({
     frame: true,
     height: 720,
     width: 1280,
@@ -96,4 +107,44 @@ app.on('ready', () => {
   autoUpdater.logger = log
   autoUpdater.checkForUpdatesAndNotify()
   mainWindow = createMainWindow()
+})
+
+ipcMain.addListener(SHOULD_CLOSE, () => {
+  if (mainWindow) {
+    mainWindow.close()
+  }
+})
+
+function getAppFolder() {
+  const home = os.homedir()
+  return path.join(home, '.atomize')
+}
+
+function getFilePath(filename: string) {
+  return path.join(getAppFolder(), filename)
+}
+
+ipcMain.on(
+  SAVE_FILE,
+  (event: IpcMainEvent, filename: string, data: any, guid: string) => {
+    const filePath = getFilePath(filename)
+    if (!fs.existsSync(getAppFolder())) {
+      fs.mkdirSync(getAppFolder())
+    }
+    fs.writeFile(filePath, JSON.stringify(data), 'utf8', err => {
+      event.reply(`${SAVE_FILE_RESULT}:${guid}`, {
+        err,
+      })
+    })
+  }
+)
+
+ipcMain.on(READ_FILE, (event: IpcMainEvent, filename: string, guid: string) => {
+  const filePath = getFilePath(filename)
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    event.reply(`${READ_FILE_RESULT}:${guid}`, {
+      err,
+      data: err ? null : JSON.parse(data),
+    })
+  })
 })
