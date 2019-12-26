@@ -13,6 +13,10 @@ import MainPanel from './components/main'
 import AddServerModal from './components/add-server-modal'
 import SettingsModal from './components/settings-modal'
 
+import { setup } from './persistence'
+
+setup()
+
 export const App = () => (
   <Provider store={store}>
     <ThemeProvider>
