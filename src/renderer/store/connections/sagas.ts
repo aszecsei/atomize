@@ -297,6 +297,9 @@ function* subscribeToChannelMessage(
   channelId: string
 ) {
   let channel = getChannel(yield select(), serverId, channelId) as IChannel
+  if (channel.name == '#') {
+    return
+  }
   const evChan = eventChannel(emit => {
     const handler = (nick: string, text: string, _message: irc.IMessage) => {
       emit(
