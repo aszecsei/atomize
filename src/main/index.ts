@@ -32,7 +32,7 @@ let mainWindow: BrowserWindow | null
 
 export function createMainWindow() {
   const window = cfg.window().create({
-    frame: true,
+    frame: false,
     height: 720,
     width: 1280,
     webPreferences: {
