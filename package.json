@@ -41,7 +41,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "commitizen": "^4.0.3",
     "cz-conventional-changelog": "^3.0.2",
-    "electron": "^7.2.4",
+    "electron": "^11.5.0",
     "electron-builder": "^21.2.0",
     "electron-devtools-installer": "^2.2.4",
     "electron-webpack": "^2.7.4",
